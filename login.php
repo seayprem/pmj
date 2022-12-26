@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เข้าสู่ระบบ<</title>
+  <title>เข้าสู่ระบบ</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/signin.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -28,8 +28,6 @@
         <h1 class="h3 mb-3 fw-normal">กรุณาเข้าสู่ระบบ</h1>
       </div>
 
-      
-        
       <div class="form-floating">
         <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">ชื่อผู้ใช้</label>
