@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/jquery.dataTables.min.css">
 </head>
 <body>
   
@@ -87,12 +88,64 @@
         <h2 class="fs-5"> Dashboard</h2>
         <hr>
       </div>
+
+
+      <!-- start table transfer  -->
+      <div class="dashboard-content px-3 pt-4">
+        <h2 class="fs-5"> รายการเดินสินค้าทั้งหมด</h2><br>
+        <!-- start table  -->
+        <div class="table-responsive">
+
+          <table class="table align-middle table-hover" id="myTable">
+            <thead class="table-pmj text-white">
+              <tr class="text-center">
+                <th>ลำดับ</th>
+                <th>รหัสสินค้า</th>
+                <th>ชื่อสินค้า</th>
+                <th>ประเภทสินค้า</th>
+                <th>จำนวนสินค้า</th>
+                <th>ประเภทการทำรายการ</th>
+                <th>ชื่อคนทำรายการ</th>
+                <th>เวลาทำรายการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center">
+                <td>1</td>
+                <td>P0001</td>
+                <td>กระดาษ A4</td>
+                <td>กระดาษ</td>
+                <td>4</td>
+                <td>เบิก</td>
+                <td>ข้าวโอ๊ต</td>
+                <td>26/12/2565</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <!-- end table  -->
+      </div>
+      <!-- end table transfer  -->
+
+
       <!-- end dashboard content  -->
 
 
     </div>
 
   </div>
+
+  <script src="js/jquery-3.6.3.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.dataTables.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $("#myTable").DataTable();
+    });
+  </script>
 
 </body>
 </html>

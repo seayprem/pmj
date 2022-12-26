@@ -40,6 +40,10 @@ hr.h-color {
   color: #000;
 }
 
+.table-pmj {
+  background-color: #EC1B89;
+}
+
 @media(max-width: 767px) {
   #side_nav {
     margin-left: -250px;
