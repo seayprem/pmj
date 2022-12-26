@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/fontawesome.min.css">
 </head>
 <body>
   
@@ -16,8 +18,7 @@
     <!-- start navbar  -->
     <div class="sidebar" id="side_nav">
       <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-between">
-        <h1 class="fs-4"><span class="bg-white text-dark rounded shadow px-2 me-2"><i
-              class="fa-solid fa-car-side"></i></span><span class="text-white">สนง. พมจ.</span></h1>
+        <h1 class="fs-4"><span class="bg-white text-dark rounded shadow px-2 me-2"></span><span class="text-white">สนง. พมจ.</span></h1>
         <button class="btn d-md-none d-block close-btn px-1 py-0 text-white"><i
             class="fa-solid fa-bars-staggered"></i></button>
       </div>
@@ -63,7 +64,7 @@
 
           <div class="d-flex justify-content-between d-md-none d-block">
             <button class="btn px-1 py-0 open-btn me-2"><i class="fa-solid fa-bars-staggered"></i></button>
-            <a class="navbar-brand" href="#"><span class="bg-dark rounded px-2 py-0 text-white">SOK</span></a>
+            <a class="navbar-brand" href="#"><span class="bg-pmj rounded px-2 py-0 text-white">สนง. พมจ.</span></a>
           </div>
 
           <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse"
@@ -140,6 +141,7 @@
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.dataTables.min.js"></script>
+  <script src="js/responsive.js"></script>
 
   <script>
     $(document).ready(function() {

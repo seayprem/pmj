@@ -44,6 +44,10 @@ hr.h-color {
   background-color: #EC1B89;
 }
 
+.bg-pmj {
+  background-color: #EC1B89;
+}
+
 @media(max-width: 767px) {
   #side_nav {
     margin-left: -250px;
