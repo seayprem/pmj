@@ -21,7 +21,7 @@
 </style>
 <body>
   <main class="form-signin">
-    <form>
+    <form action="checkLogin.php" method="POST">
 
       <div class="text-center">
         <img class="mb-4" src="img/pmj_logo.png" alt="" width="160" height="150">
@@ -29,15 +29,15 @@
       </div>
 
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <input type="text" name="username" class="form-control" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">ชื่อผู้ใช้</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
         <label for="floatingPassword">รหัสผ่าน</label>
       </div>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">เข้าสู่ระบบ</button>
+      <button class="w-100 btn btn-lg btn-primary" name="login" type="submit">เข้าสู่ระบบ</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
     </form>
   </main>
