@@ -3,6 +3,11 @@ session_start();
 if(empty($_SESSION['emp_level'])) {
   header("Location: login.php");
 }
+
+if($_SESSION['emp_level'] != 2) {
+  header("Location: ../index.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +23,7 @@ if(empty($_SESSION['emp_level'])) {
   <link rel="stylesheet" href="css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/fontawesome.min.css">
+
 </head>
 <body>
   
@@ -30,10 +36,9 @@ if(empty($_SESSION['emp_level'])) {
             class="fa-solid fa-bars-staggered"></i></button>
       </div>
 
-      <!-- Start for menuSidebar  -->
+      <!-- Start menu for admin  -->
       <?php include('includes/menuSidebar.inc.php'); ?>
-      <!-- End for menuSidebar  -->
-
+      <!-- end menu for admin  -->
       
 
     </div>
@@ -75,33 +80,28 @@ if(empty($_SESSION['emp_level'])) {
 
       <!-- start table transfer  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการสินค้าคงเหลือ</h2><br>
+        <h2 class="fs-5"> รายการเดินสินค้าทั้งหมด</h2><br>
+        <div class="mb-3">
+          <a href="#" class="btn btn-pmj">เพิ่มสินค้า</a>
+        </div>
         <!-- start table  -->
         <div class="table-responsive">
 
           <table class="table align-middle table-hover" id="myTable">
             <thead class="table-pmj text-white">
-              <tr class="text-center">
-                <th>ลำดับ</th>
-                <th>รหัสสินค้า</th>
-                <th>ชื่อสินค้า</th>
-                <th>ประเภทสินค้า</th>
-                <th>จำนวนสินค้า</th>
-                <th>ประเภทการทำรายการ</th>
-                <th>ชื่อคนทำรายการ</th>
-                <th>เวลาทำรายการ</th>
+              <tr>
+                <th class="text-center">รหัสสินค้า</th>
+                <th class="text-center">ชื่อสินค้า</th>
+                <th class="text-center">ประเภทสินค้า</th>
+                <th class="text-center">คงเหลือ</th>
               </tr>
             </thead>
             <tbody>
               <tr class="text-center">
-                <td>1</td>
                 <td>P0001</td>
                 <td>กระดาษ A4</td>
                 <td>กระดาษ</td>
-                <td>4</td>
-                <td>เบิก</td>
-                <td>ข้าวโอ๊ต</td>
-                <td>26/12/2565</td>
+                <td>10</td>
               </tr>
             </tbody>
           </table>
