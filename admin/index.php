@@ -111,8 +111,8 @@ if($_SESSION['emp_level'] != 2) {
                 <td><?= $row['cate_name']; ?></td>
                 <td><?= $row['product_qty']; ?></td>
                 <td>
-                  <a href="#" class="btn btn-pmj">แก้ไข</a>
-                  <a href="#" class="btn btn-pmj">ลบ</a>
+                  <a href="editProduct.php?id=<?= $row['product_id']; ?>" class="btn btn-pmj">แก้ไข</a>
+                  <a href="#" class="btn btn-pmj" onclick="return confirm('แน่ใจใช่หรือไม่?');">ลบ</a>
                 </td>
               </tr>
               <?php } ?>

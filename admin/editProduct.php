@@ -16,7 +16,7 @@ if($_SESSION['emp_level'] != 2) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เพิ่มพนักงาน | ผู้ดูแลระบบ</title>
+  <title>แก้ไขวัสดุสำนักงาน | ผู้ดูแลระบบ</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -73,7 +73,7 @@ if($_SESSION['emp_level'] != 2) {
 
       <!-- start dashboard content  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> เพิ่มพนักงาน</h2>
+        <h2 class="fs-5"> แก้ไขวัสดุสำนักงาน</h2>
         <hr>
       </div>
 
@@ -86,41 +86,56 @@ if($_SESSION['emp_level'] != 2) {
         </div> -->
         
         <!-- เริ่ม ฟอร์มเพิ่มวัสดุสำนักงาน -->
-        <form action="controller/addEmployeeController.php" method="POST">
+        
+        <form action="#" method="POST">
+          <?php 
+          include('../config/db.php');
+          if($_GET['id']) {
+            $id = $_GET['id'];
+            $edit_sql = "SELECT * FROM products INNER JOIN category ON products.cate_id = category.cate_id WHERE products.product_id = '$id'";
+            $edit_query = mysqli_query($conn, $edit_sql);
+            $edit_row = mysqli_fetch_array($edit_query);
+          }
+          
+          ?>
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label">ชื่อผู้ใช้</label>
-                <input type="text" class="form-control" name="username" required>
+                <label class="form-label">รหัสวัสดุสำนักงาน</label>
+                <input type="text" class="form-control" name="id" value="<?= $edit_row['product_id']; ?>" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">รหัสผ่าน</label>
-                <input type="password" class="form-control" name="password" required>
+                <label class="form-label">ชื่อวัสดุสำนักงาน</label>
+                <input type="text" class="form-control" name="name" value="<?= $edit_row['product_name']; ?>" required>
               </div>
               
               
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label">ชื่อจริง</label>
-                <input type="text" class="form-control" name="fname" required>
+                <label class="form-label">จำนวน</label>
+                <input type="number" class="form-control" name="qty" value="<?= $edit_row['product_qty']; ?>" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">นามสกุล</label>
-                <input type="text" class="form-control" name="lname" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">ตำแหน่ง</label>
-                <select class="form-select" name="level" required>
-                  <option selected disabled>กรุณาเลือกตำแหน่ง</option>
-                  <option value="1">พนักงาน</option>
-                  <option value="2">ผู้ดูแลระบบ</option>
+                <label class="form-label">ประเภทวัสดุสำนักงาน</label>
+                <select class="form-select" name="category" required>
+                  <option selected value="<?= $edit_row['cate_id']; ?>"><?= $edit_row['cate_name']; ?></option>
+                  <option disabled>กรุณาเลือกประเภทวัสดุสำนักงาน</option>
+                  <!-- เริ่ม แสดงเมนูให้เลือก -->
+                  <?php 
+                  $sql = "SELECT * FROM category ORDER BY cate_id DESC";
+                  $query = mysqli_query($conn, $sql);
+                  while($row = mysqli_fetch_array($query)) {
+                  ?>
+                  <option value="<?= $row['cate_id']; ?>"><?= $row['cate_name']; ?></option>
+                  <?php } ?>
+                  <!-- จบ แสดงเมนูให้เลือก -->
                 </select>
               </div>
             </div>
             <div class="col-md-6">
               <div class="d-grid gap-2">
-                <button type="submit" name="add" class="btn btn-pmj">บันทึก</button>
+                <button type="submit" name="update" class="btn btn-pmj">บันทึกการแก้ไข</button>
               </div>
             </div>
             <div class="col-md-6">
