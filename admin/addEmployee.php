@@ -16,7 +16,7 @@ if($_SESSION['emp_level'] != 2) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>หน้าหลัก | ผู้ดูแลระบบ</title>
+  <title>เพิ่มพนักงาน | ผู้ดูแลระบบ</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -73,59 +73,65 @@ if($_SESSION['emp_level'] != 2) {
 
       <!-- start dashboard content  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> Dashboard</h2>
+        <h2 class="fs-5"> เพิ่มวัสดุสำนักงาน</h2>
         <hr>
       </div>
 
 
       <!-- start table transfer  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการเดินสินค้าทั้งหมด</h2><br>
-        <div class="mb-3">
-          <a href="addProduct.php" class="btn btn-pmj">เพิ่มสินค้า</a>
-        </div>
-        <!-- start table  -->
-        <div class="table-responsive">
-
-          <table class="table align-middle table-hover" id="myTable">
-            <thead class="table-pmj text-white">
-              <tr>
-                <th class="text-center">รหัสสินค้า</th>
-                <th class="text-center">ชื่อสินค้า</th>
-                <th class="text-center">ประเภทสินค้า</th>
-                <th class="text-center">คงเหลือ</th>
-                <th class="text-center">จัดการ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- เริ่ม แสดงรายการวัสดุสำนักงาน -->
-              <?php 
-              include('../config/db.php');
-              $sql = "SELECT * FROM products INNER JOIN category ON products.cate_id = category.cate_id";
-              $query = mysqli_query($conn, $sql);
-              while($row = mysqli_fetch_array($query)) {
-              ?>
-              <tr class="text-center">
-                <td><?= $row['product_id']; ?></td>
-                <td><?= $row['product_name']; ?></td>
-                <td><?= $row['cate_name']; ?></td>
-                <td><?= $row['product_qty']; ?></td>
-                <td>
-                  <a href="#" class="btn btn-pmj">แก้ไข</a>
-                  <a href="#" class="btn btn-pmj">ลบ</a>
-                </td>
-              </tr>
-              <?php } ?>
-
-              <!-- จบ แสดงรายการวัสดุสำนักงาน -->
-
-            </tbody>
-          </table>
-
-        </div>
-        <!-- end table  -->
-      </div>
-      <!-- end table transfer  -->
+        <!-- <h2 class="fs-5"> เพิ่มวัสดุสำนักงาน</h2><br> -->
+        <!-- <div class="mb-3">
+          <a href="#" class="btn btn-pmj">เพิ่มสินค้า</a>
+        </div> -->
+        
+        <!-- เริ่ม ฟอร์มเพิ่มวัสดุสำนักงาน -->
+        <form action="#" method="POST">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">ชื่อผู้ใช้</label>
+                <input type="text" class="form-control" name="username" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ชื่อวัสดุสำนักงาน</label>
+                <input type="password" class="form-control" name="password" required>
+              </div>
+              
+              
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">ชื่อจริง</label>
+                <input type="text" class="form-control" name="fname" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">นามสกุล</label>
+                <input type="password" class="form-control" name="lname" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ตำแหน่ง</label>
+                <select class="form-select" name="level" required>
+                  <option selected disabled>กรุณาเลือกตำแหน่ง</option>
+                  <option value="1">พนักงาน</option>
+                  <option value="2">ผู้ดูแลระบบ</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid gap-2">
+                <button type="submit" name="add" class="btn btn-pmj">บันทึก</button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid gap-2">
+                <a href="index.php" class="btn btn-pmj">ย้อนกลับ</a>
+              </div>
+            </div>
+          </div>
+        </form>
+          
+        <!-- จบ ฟอร์มเพิ่มวัสดุสำนักงาน -->
 
 
       <!-- end dashboard content  -->
@@ -140,12 +146,6 @@ if($_SESSION['emp_level'] != 2) {
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/responsive.js"></script>
-
-  <script>
-    $(document).ready(function() {
-      $("#myTable").DataTable();
-    });
-  </script>
 
 </body>
 </html>

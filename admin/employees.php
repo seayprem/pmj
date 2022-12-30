@@ -16,7 +16,7 @@ if($_SESSION['emp_level'] != 2) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>หน้าหลัก | ผู้ดูแลระบบ</title>
+  <title>พนักงาน | ผู้ดูแลระบบ</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -73,16 +73,16 @@ if($_SESSION['emp_level'] != 2) {
 
       <!-- start dashboard content  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> Dashboard</h2>
+        <h2 class="fs-5"> พนักงาน</h2>
         <hr>
       </div>
 
 
       <!-- start table transfer  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการเดินสินค้าทั้งหมด</h2><br>
+        <h2 class="fs-5"> รายการพนักงานทั้งหมด</h2><br>
         <div class="mb-3">
-          <a href="addProduct.php" class="btn btn-pmj">เพิ่มสินค้า</a>
+          <a href="addEmployee.php" class="btn btn-pmj">เพิ่มพนักงาน</a>
         </div>
         <!-- start table  -->
         <div class="table-responsive">
@@ -90,10 +90,9 @@ if($_SESSION['emp_level'] != 2) {
           <table class="table align-middle table-hover" id="myTable">
             <thead class="table-pmj text-white">
               <tr>
-                <th class="text-center">รหัสสินค้า</th>
-                <th class="text-center">ชื่อสินค้า</th>
-                <th class="text-center">ประเภทสินค้า</th>
-                <th class="text-center">คงเหลือ</th>
+                <th class="text-center">ชื่อจริง</th>
+                <th class="text-center">นามสกุล</th>
+                <th class="text-center">ตำแหน่ง</th>
                 <th class="text-center">จัดการ</th>
               </tr>
             </thead>
@@ -101,15 +100,22 @@ if($_SESSION['emp_level'] != 2) {
               <!-- เริ่ม แสดงรายการวัสดุสำนักงาน -->
               <?php 
               include('../config/db.php');
-              $sql = "SELECT * FROM products INNER JOIN category ON products.cate_id = category.cate_id";
+              $sql = "SELECT * FROM employees";
               $query = mysqli_query($conn, $sql);
               while($row = mysqli_fetch_array($query)) {
               ?>
               <tr class="text-center">
-                <td><?= $row['product_id']; ?></td>
-                <td><?= $row['product_name']; ?></td>
-                <td><?= $row['cate_name']; ?></td>
-                <td><?= $row['product_qty']; ?></td>
+                <td><?= $row['emp_fname']; ?></td>
+                <td><?= $row['emp_lname']; ?></td>
+                <td>
+                  <?php 
+                  if($row['emp_level'] == 2) {
+                    echo "ผู้ดูแลระบบ";
+                  } else {
+                    echo "พนักงาน";
+                  }
+                  ?>
+                </td>
                 <td>
                   <a href="#" class="btn btn-pmj">แก้ไข</a>
                   <a href="#" class="btn btn-pmj">ลบ</a>

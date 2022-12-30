@@ -12,16 +12,16 @@
 
         <!-- <a class="text-decoration-none px-3 py-2 d-block text-secondary"><small>คลังสินค้า</small></a> -->
 
-        <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
+        <li class=""><a href="index.php" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-boxes-stacked"></i> สินค้าคงเหลือ</a>
         </li>
         <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-arrow-right-arrow-left"></i> รายการเบิกจ่ายสินค้า</a>
         </li>
-        <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
+        <li class=""><a href="addProduct.php" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-arrow-right-arrow-left"></i> เพิ่มรายการสินค้า</a>
         </li>
-        <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
+        <li class=""><a href="employees.php" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-arrow-right-arrow-left"></i> พนักงาน</a>
         </li>
         <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
