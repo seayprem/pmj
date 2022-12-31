@@ -87,7 +87,7 @@ if($_SESSION['emp_level'] != 2) {
         
         <!-- เริ่ม ฟอร์มเพิ่มวัสดุสำนักงาน -->
         
-        <form action="#" method="POST">
+        <form action="controller/addProductController.php" method="POST">
           <?php 
           include('../config/db.php');
           if($_GET['id']) {
@@ -102,7 +102,10 @@ if($_SESSION['emp_level'] != 2) {
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">รหัสวัสดุสำนักงาน</label>
-                <input type="text" class="form-control" name="id" value="<?= $edit_row['product_id']; ?>" required>
+                <input type="text" class="form-control" value="<?= $edit_row['product_id']; ?>" disabled required>
+              </div>
+              <div class="mb-3">
+                <input type="hidden" class="form-control" name="id" value="<?= $edit_row['product_id']; ?>">
               </div>
               <div class="mb-3">
                 <label class="form-label">ชื่อวัสดุสำนักงาน</label>

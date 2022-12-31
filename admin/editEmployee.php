@@ -16,7 +16,7 @@ if($_SESSION['emp_level'] != 2) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เพิ่มพนักงาน | ผู้ดูแลระบบ</title>
+  <title>แก้ไขวัสดุสำนักงาน | ผู้ดูแลระบบ</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -73,7 +73,7 @@ if($_SESSION['emp_level'] != 2) {
 
       <!-- start dashboard content  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> เพิ่มพนักงาน</h2>
+        <h2 class="fs-5"> แก้ไขวัสดุสำนักงาน</h2>
         <hr>
       </div>
 
@@ -87,15 +87,24 @@ if($_SESSION['emp_level'] != 2) {
         
         <!-- เริ่ม ฟอร์มเพิ่มวัสดุสำนักงาน -->
         <form action="controller/addEmployeeController.php" method="POST">
+          <?php 
+            include('../config/db.php');
+            if($_GET['id']) {
+              $id = $_GET['id'];
+              $edit_sql = "SELECT * FROM employees WHERE emp_id = '$id'";
+              $edit_query = mysqli_query($conn, $edit_sql);
+              $edit_row = mysqli_fetch_array($edit_query);
+            } ?>
           <div class="row">
             <div class="col-md-6">
+              <input type="hidden" name="id" value="<?= $edit_row['emp_id']; ?>">
               <div class="mb-3">
                 <label class="form-label">ชื่อผู้ใช้</label>
-                <input type="text" class="form-control" name="username" required>
+                <input type="text" class="form-control" name="username" value="<?= $edit_row['emp_user']; ?>" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">รหัสผ่าน</label>
-                <input type="password" class="form-control" name="password" required>
+                <input type="password" class="form-control" name="password" value="<?= $edit_row['emp_pass']; ?>"  required>
               </div>
               
               
@@ -103,16 +112,17 @@ if($_SESSION['emp_level'] != 2) {
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">ชื่อจริง</label>
-                <input type="text" class="form-control" name="fname" required>
+                <input type="text" class="form-control" name="fname" value="<?= $edit_row['emp_fname']; ?>" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">นามสกุล</label>
-                <input type="text" class="form-control" name="lname" required>
+                <input type="text" class="form-control" name="lname" value="<?= $edit_row['emp_lname']; ?>" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">ตำแหน่ง</label>
                 <select class="form-select" name="level" required>
-                  <option selected disabled>กรุณาเลือกตำแหน่ง</option>
+                  <option selected value="<?= $edit_row['emp_level']; ?>"><?= $edit_row['emp_level']; ?></option>
+                  <option disabled>กรุณาเลือกตำแหน่ง</option>
                   <option value="1">พนักงาน</option>
                   <option value="2">ผู้ดูแลระบบ</option>
                 </select>
@@ -120,7 +130,7 @@ if($_SESSION['emp_level'] != 2) {
             </div>
             <div class="col-md-6">
               <div class="d-grid gap-2">
-                <button type="submit" name="add" class="btn btn-pmj">บันทึก</button>
+                <button type="submit" name="update" class="btn btn-pmj">บันทึกการแก้ไข</button>
               </div>
             </div>
             <div class="col-md-6">
