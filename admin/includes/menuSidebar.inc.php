@@ -15,7 +15,7 @@
         <li class=""><a href="index.php" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-boxes-stacked"></i> สินค้าคงเหลือ</a>
         </li>
-        <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
+        <li class=""><a href="history.php" class="text-decoration-none px-3 py-2 d-block"><i
               class="fa-solid fa-arrow-right-arrow-left"></i> รายการเบิกจ่ายสินค้า</a>
         </li>
         <li class=""><a href="addProduct.php" class="text-decoration-none px-3 py-2 d-block"><i
