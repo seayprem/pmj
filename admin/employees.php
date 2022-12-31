@@ -118,7 +118,7 @@ if($_SESSION['emp_level'] != 2) {
                 </td>
                 <td>
                   <a href="editEmployee.php?id=<?= $row['emp_id']; ?>" class="btn btn-pmj">แก้ไข</a>
-                  <a href="#" class="btn btn-pmj">ลบ</a>
+                  <a href="controller/addEmployeeController.php?delete=<?= $row['emp_id']; ?>" class="btn btn-pmj" onclick="return confirm('แน่ใจใช่หรือไม่?');">ลบ</a>
                 </td>
               </tr>
               <?php } ?>

@@ -51,4 +51,18 @@ if(isset($_POST['update'])) {
 
 // จบ ระบบอัพเดทพนักงาน
 
+// เริ่ม ลบพนักงาน
+if(isset($_GET['delete'])) {
+  $id = $_GET['delete'];
+  $sql = "DELETE FROM employees WHERE emp_id = '$id'";
+  $query = mysqli_query($conn, $sql);
+  if($query) {
+    echo "สำเร็จ";
+    header("Location: ../employees.php");
+  } else {
+    echo "ล้มเหลว";
+  }
+}
+// จบ ลบพนักงาน
+
 ?>
