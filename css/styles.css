@@ -48,6 +48,17 @@ hr.h-color {
   background-color: #EC1B89;
 }
 
+.btn-pmj {
+  background-color: #EC1B89;
+  color: white;
+}
+
+.btn-pmj:hover {
+  opacity: 90%;
+  color: white;
+}
+
+
 @media(max-width: 767px) {
   #side_nav {
     margin-left: -250px;

@@ -12,7 +12,7 @@ if(empty($_SESSION['emp_level'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>หน้าหลัก</title>
+  <title>รายการเบิกจ่าย</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -69,82 +69,42 @@ if(empty($_SESSION['emp_level'])) {
 
       <!-- start dashboard content  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการสำหรับการเบิกวัสดุสำนักงาน</h2>
+        <h2 class="fs-5"> ประวัติรายการสำหรับการเบิกวัสดุสำนักงาน</h2>
         <hr>
       </div>
 
 
       <!-- start table transfer  -->
       <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการสินค้าคงเหลือ</h2><br>
+        <h2 class="fs-5"> ประวัติเบิกวัสดุสำนักงาน</h2><br>
         <!-- start table  -->
         <div class="table-responsive">
 
           <table class="table align-middle table-hover" id="myTable">
             <thead class="table-pmj text-white">
               <tr>
-                <th class="text-center">รหัสสินค้า</th>
+                <th class="text-center">ลำดับ</th>
                 <th class="text-center">ชื่อสินค้า</th>
                 <th class="text-center">ประเภทสินค้า</th>
-                <th class="text-center">จำนวนสินค้าคงเหลือ</th>
-                <th class="text-center">เบิกวัสดุ</th>
+                <th class="text-center">จำนวนที่เบิก</th>
               </tr>
             </thead>
             <tbody>
               <!-- เริ่ม แสดงรายการวัสดุสำนักงาน -->
               <?php 
-              $sql = "SELECT * FROM products INNER JOIN category ON products.cate_id = category.cate_id";
+              $session_id = $_SESSION['emp_id'];
+              $sql = "SELECT * FROM transactions INNER JOIN products ON transactions.product_id = products.product_id INNER JOIN employees ON transactions.emp_id = employees.emp_id INNER JOIN category ON products.cate_id = category.cate_id WHERE employees.emp_id = '$session_id'";
               $query = mysqli_query($conn, $sql);
               while($row = mysqli_fetch_array($query)) {
 
               
               ?>
               <tr class="text-center">
-                <td><?= $row['product_id']; ?></td>
+                <td><?= $row['t_id']; ?></td>
                 <td><?= $row['product_name']; ?></td>
                 <td><?= $row['cate_name']; ?></td>
-                <td><?= $row['product_qty']; ?></td>
-                <td>
-                  <!-- start ปุ่ม Modal -->
-                  <a href="#" class="btn btn-pmj" data-bs-toggle="modal" data-bs-target="#<?= $row['product_id']; ?>">เบิกวัสดุ</a>
-  
-                  
-
-                  <!-- end ปุ่ม Modal -->
-
-                </td>
+                <td><?= $row['t_qty']; ?></td>
               </tr>
-              <!-- start form modal  -->
-              <div class="modal fade" id="<?= $row['product_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel"><?= $row['product_name']; ?></h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <!-- Start Form QTY for disbursement -->
-                          <form action="controller/disbursementController.php" method="POST">
-                            <input type="hidden" name="id" value="<?= $row['product_id']; ?>">
-                            <input type="hidden" name="qty_product" value="<?= $row['product_qty']; ?>">
-                            <input type="hidden" name="emp_id" value="<?= $_SESSION['emp_id']; ?>">
-                            <div class="mb-3">
-                              <label class="label">จำนวนที่จะเบิกวัสดุสำนักงาน</label>
-                              <input type="number" class="form-control" name="qty" value="1" required>
-                            </div>
-                          
-                          <!-- End Form QTY for disbursement -->
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                          <button type="submit" name="export" class="btn btn-pmj" onclick="return confirm('แน่ใจใช่หรือไม่?');">บันทึก</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <!-- end form modal  -->
-
               <?php } ?>
               <!-- จบ แสดงรายการวัสดุสำนักงาน -->
             </tbody>
