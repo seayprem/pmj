@@ -11,13 +11,13 @@ if(isset($_POST['login'])) {
   $query = mysqli_query($conn, $sql);
   $row = mysqli_fetch_array($query);
   if(mysqli_num_rows($query) > 0) {
-    $_SESSION['emp_level'] = $row['emp_level'];
+    $_SESSION['emp_role'] = $row['emp_role'];
     $_SESSION['emp_fname'] = $row['emp_fname'];
     $_SESSION['emp_lname'] = $row['emp_lname'];
     $_SESSION['emp_id'] = $row['emp_id'];
-    header("Location: index.php");
+    echo 'success';
   } else {
-    echo '<script>alert("เข้าสู่ระบบล้มเหลว"); window.location.href = "login.php";</script>';
+    echo 'failed';
   }
 
 }

@@ -1,24 +1,48 @@
 <?php 
-include('../config/db.php');
+include('config/db.php');
 session_start();
-if(empty($_SESSION['emp_level'])) {
-  header("Location: login.php");
+// Check Session
+if(empty($_SESSION['emp_role'])) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่ได้รับอนุญาตในการเข้าถึงหน้าต่างนี้',
+      text: 'กรุณาเข้าสู่ระบบ!',
+    }).then((result) => {
+      window.location.href = 'login.php';
+    });
+  });
+  </script>";
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รายการเบิกจ่าย</title>
+  <title>วัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/fontawesome.min.css">
+
+  <style>
+    .dataTables_filter input {
+      margin-bottom: 1em;
+    }
+  </style>
+
 </head>
 <body>
   
@@ -35,9 +59,8 @@ if(empty($_SESSION['emp_level'])) {
       <?php include('includes/menuSidebar.inc.php'); ?>
       <!-- End for menuSidebar  -->
 
-      
-
     </div>
+
     <!-- end navbar  -->
 
     <!-- start content -->
@@ -64,77 +87,57 @@ if(empty($_SESSION['emp_level'])) {
           </div>
         </div>
       </nav>
+    <!-- end content -->
 
-      <!-- end content -->
+    <!-- start dashboard content  -->
+    <div class="dashboard-content px-3 pt-4">
+      <h2 class="fs-5"> วัสดุสำนักงาน</h2>
+      <hr>
+      
+      <!-- start add button  -->
+      <a href="#" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลวัสดุสำนักงาน</a>
+      <!-- end add button  -->
 
-      <!-- start dashboard content  -->
-      <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> ประวัติรายการสำหรับการเบิกวัสดุสำนักงาน</h2>
-        <hr>
-      </div>
-
-
-      <!-- start table transfer  -->
-      <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> ประวัติเบิกวัสดุสำนักงาน</h2><br>
-        <!-- start table  -->
-        <div class="table-responsive">
-
-          <table class="table align-middle table-hover" id="myTable">
-            <thead class="table-pmj text-white">
-              <tr>
-                <th class="text-center">ลำดับ</th>
-                <th class="text-center">ชื่อสินค้า</th>
-                <th class="text-center">ประเภทสินค้า</th>
-                <th class="text-center">จำนวนที่เบิก</th>
-                <th class="text-center">พนักงานที่เบิก</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- เริ่ม แสดงรายการวัสดุสำนักงาน -->
-              <?php 
-              $session_id = $_SESSION['emp_id'];
-              $sql = "SELECT * FROM transactions INNER JOIN products ON transactions.product_id = products.product_id INNER JOIN employees ON transactions.emp_id = employees.emp_id INNER JOIN category ON products.cate_id = category.cate_id";
-              $query = mysqli_query($conn, $sql);
-              while($row = mysqli_fetch_array($query)) {
-
-              
-              ?>
-              <tr class="text-center">
-                <td><?= $row['t_id']; ?></td>
-                <td><?= $row['product_name']; ?></td>
-                <td><?= $row['cate_name']; ?></td>
-                <td><?= $row['t_qty']; ?></td>
-                <td><?= $row['emp_fname'] . " " . $row['emp_lname']; ?></td>
-              </tr>
-              <?php } ?>
-              <!-- จบ แสดงรายการวัสดุสำนักงาน -->
-            </tbody>
-          </table>
-
-        </div>
-        <!-- end table  -->
-      </div>
-      <!-- end table transfer  -->
-
-
-      <!-- end dashboard content  -->
-
+     
 
     </div>
 
+
+
+    <!-- end dashboard content  -->
+
   </div>
+
+  
 
   <script src="js/jquery-3.6.3.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/sweetalert2@11.js"></script>
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/responsive.js"></script>
 
   <script>
     $(document).ready(function() {
-      $("#myTable").DataTable();
-    });
+
+      // Start List Data Table 
+      $('#myTable').DataTable();
+      // End List Data Table 
+
+      $('#logout').on('click', function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'ออกจากระบบสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        }).then((result) => {
+          window.location = 'logout.php';
+        })
+      })
+
+    })
   </script>
 
 </body>

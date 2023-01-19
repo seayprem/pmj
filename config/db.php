@@ -2,7 +2,7 @@
 $DB_SERVER = "localhost";
 $DB_USER = "root";
 $DB_PASS = "";
-$DB_NAME = "pmj";
+$DB_NAME = "projectpmj";
 
 $conn = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 

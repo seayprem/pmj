@@ -1,24 +1,61 @@
 <?php 
 include('config/db.php');
 session_start();
-if(empty($_SESSION['emp_level'])) {
-  header("Location: login.php");
+if(empty($_SESSION['emp_role'])) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่ได้รับอนุญาตในการเข้าถึงหน้าต่างนี้',
+      text: 'กรุณาเข้าสู่ระบบ!',
+    }).then((result) => {
+      window.location.href = 'login.php';
+    });
+  });
+  </script>";
 }
-?>
+// Check Permission
+// if you role == 1
+// u can't entry this window
+if($_SESSION['emp_role'] == 1) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+    }).then((result) => {
+      window.location.href = 'offices.php';
+    });
+  });
+  </script>";
+}
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>หน้าหลัก</title>
+  <title>สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/fontawesome.min.css">
+
 </head>
 <body>
   
@@ -35,9 +72,8 @@ if(empty($_SESSION['emp_level'])) {
       <?php include('includes/menuSidebar.inc.php'); ?>
       <!-- End for menuSidebar  -->
 
-      
-
     </div>
+
     <!-- end navbar  -->
 
     <!-- start content -->
@@ -64,115 +100,43 @@ if(empty($_SESSION['emp_level'])) {
           </div>
         </div>
       </nav>
+    <!-- end content -->
 
-      <!-- end content -->
-
-      <!-- start dashboard content  -->
-      <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการสำหรับการเบิกวัสดุสำนักงาน</h2>
-        <hr>
-      </div>
-
-
-      <!-- start table transfer  -->
-      <div class="dashboard-content px-3 pt-4">
-        <h2 class="fs-5"> รายการสินค้าคงเหลือ</h2><br>
-        <!-- start table  -->
-        <div class="table-responsive">
-
-          <table class="table align-middle table-hover" id="myTable">
-            <thead class="table-pmj text-white">
-              <tr>
-                <th class="text-center">รหัสสินค้า</th>
-                <th class="text-center">ชื่อสินค้า</th>
-                <th class="text-center">ประเภทสินค้า</th>
-                <th class="text-center">จำนวนสินค้าคงเหลือ</th>
-                <th class="text-center">เบิกวัสดุ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- เริ่ม แสดงรายการวัสดุสำนักงาน -->
-              <?php 
-              $sql = "SELECT * FROM products INNER JOIN category ON products.cate_id = category.cate_id";
-              $query = mysqli_query($conn, $sql);
-              while($row = mysqli_fetch_array($query)) {
-
-              
-              ?>
-              <tr class="text-center">
-                <td><?= $row['product_id']; ?></td>
-                <td><?= $row['product_name']; ?></td>
-                <td><?= $row['cate_name']; ?></td>
-                <td><?= $row['product_qty']; ?></td>
-                <td>
-                  <!-- start ปุ่ม Modal -->
-                  <a href="#" class="btn btn-pmj" data-bs-toggle="modal" data-bs-target="#<?= $row['product_id']; ?>">เบิกวัสดุ</a>
-  
-                  
-
-                  <!-- end ปุ่ม Modal -->
-
-                </td>
-              </tr>
-              <!-- start form modal  -->
-              <div class="modal fade" id="<?= $row['product_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel"><?= $row['product_name']; ?></h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <!-- Start Form QTY for disbursement -->
-                          <form action="controller/disbursementController.php" method="POST">
-                            <input type="hidden" name="id" value="<?= $row['product_id']; ?>">
-                            <input type="hidden" name="qty_product" value="<?= $row['product_qty']; ?>">
-                            <input type="hidden" name="emp_id" value="<?= $_SESSION['emp_id']; ?>">
-                            <div class="mb-3">
-                              <label class="label">จำนวนที่จะเบิกวัสดุสำนักงาน</label>
-                              <input type="number" class="form-control" name="qty" value="1" required>
-                            </div>
-                          
-                          <!-- End Form QTY for disbursement -->
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                          <button type="submit" name="export" class="btn btn-pmj" onclick="return confirm('แน่ใจใช่หรือไม่?');">บันทึก</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <!-- end form modal  -->
-
-              <?php } ?>
-              <!-- จบ แสดงรายการวัสดุสำนักงาน -->
-            </tbody>
-          </table>
-
-        </div>
-        <!-- end table  -->
-      </div>
-      <!-- end table transfer  -->
-
-
-      <!-- end dashboard content  -->
-
-
+    <!-- start dashboard content  -->
+    <div class="dashboard-content px-3 pt-4">
+      <h2 class="fs-5"> Dashboard</h2>
+      <hr>
     </div>
+
+
+
+    <!-- end dashboard content  -->
 
   </div>
 
   <script src="js/jquery-3.6.3.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.dataTables.min.js"></script>
+  <script src="js/sweetalert2@11.js"></script>
   <script src="js/responsive.js"></script>
 
   <script>
     $(document).ready(function() {
-      $("#myTable").DataTable();
-    });
+
+      $('#logout').on('click', function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'ออกจากระบบสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        }).then((result) => {
+          window.location = 'logout.php';
+        })
+      })
+
+    })
   </script>
 
 </body>
