@@ -108,7 +108,10 @@ if(empty($_SESSION['emp_role'])) {
         $row = mysqli_fetch_array($query);
         
 
-        
+        if($_REQUEST['act'] == "cancel") {
+          unset($_SESSION['cart']);
+          header("location: offices.php");
+        }
         
         
         $i++;
@@ -133,7 +136,7 @@ if(empty($_SESSION['emp_role'])) {
       
       <!-- submit  -->
       <input type="submit" name="saveorder" value="ยืนยัน" class="btn btn-success">
-      <a href="offices.php?act=cancel" class="btn btn-danger">ยกเลิก</a>
+      <a href="confirm.php?act=cancel" class="btn btn-danger">ยกเลิก</a>
     </div>
       </div>
       </form>
