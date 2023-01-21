@@ -139,10 +139,6 @@ if(empty($_SESSION['emp_role'])) {
         $query = mysqli_query($conn, $sql);
         $row = mysqli_fetch_array($query);
         
-
-        
-        
-        
         $i++;
 
       ?>
@@ -157,7 +153,7 @@ if(empty($_SESSION['emp_role'])) {
                 <a href="lists.php?id=<?= $row['office_id']; ?>&act=decres" id="decres" class="btn btn-primary mb-3">-</a>
               </div>
               <div class="col-auto">
-                <input type="number" class="form-control" name="qty" id="qty" value="<?= $qty; ?>">
+                <input type="number" class="form-control" name="qty" id="qty" value="<?= $qty; ?>" min="1">
               </div>
             <div class="col-auto">
               <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary mb-3">+</a>

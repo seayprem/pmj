@@ -105,7 +105,7 @@ if(empty($_SESSION['emp_role'])) {
       <!-- end add button  -->
 
      <!-- Start List Offices Supllier -->
-     <table class="table table-danger" id="myTable">
+     <table class="table" id="myTable">
         <thead>
           <tr>
             <th class="text-center">ลำดับ</th>
@@ -124,7 +124,7 @@ if(empty($_SESSION['emp_role'])) {
 
             $i++;
           ?>
-          <tr>
+          <tr class="<?php if($row['office_qty'] == 0) { echo 'table-danger'; } ?>">
             <td class="text-center"><?= $i; ?></td>
             <td class="text-center"><?= $row['office_name']; ?></td>
             <td class="text-center"><?= number_format($row['office_qty']); ?></td>
@@ -138,9 +138,11 @@ if(empty($_SESSION['emp_role'])) {
               <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['office_id']; ?>"><i class="fa-solid fa-trash"></i></a>
               <?php } ?>
               <?php 
-              if($_SESSION['emp_role'] == 1) {
+              if($_SESSION['emp_role'] == 1 && $row['office_qty'] >= 1) {
               ?>
               <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
+              <?php } else { ?>
+              <a href="#" class="btn btn-primary">ไม่สามารถเบิกได้</a>
               <?php } ?>
             </td>
           </tr>
