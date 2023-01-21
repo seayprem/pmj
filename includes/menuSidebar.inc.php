@@ -7,6 +7,8 @@
   ?>
   <li class=""><a href="offices.php" class="text-decoration-none px-3 py-2 d-block"> วัสดุสำนักงาน</a>
   </li>
+  <li class=""><a href="lists.php" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุสำนักงาน</a>
+  </li>
   <li class=""><a href="history.php" class="text-decoration-none px-3 py-2 d-block"> ประวัติการเบิกวัสดุ</a>
   </li>
   <!-- ADMIN  -->

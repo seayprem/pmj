@@ -86,7 +86,7 @@
                   showConfirmButton: false,
                   timer: 1500
                 }).then((result) => {
-                  window.location = "offices.php";
+                  window.location = "index.php";
                 })
               } else {
                   Swal.fire({

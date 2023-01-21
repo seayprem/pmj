@@ -20,27 +20,6 @@ if(empty($_SESSION['emp_role'])) {
   });
   </script>";
 }
-// Check Permission
-// if you role == 1
-// u can't entry this window
-if($_SESSION['emp_role'] == 1) {
-  header("Location: offices.php");
-  echo '<script src="js/sweetalert2@11.js"></script>';
-  echo '<script src="js/jquery-3.6.3.min.js"></script>';
-  // echo '<script>window.location = "login.php"</script>';
-  echo "<script>
-  $(document).ready(function() {
-    $('div').hide();
-    Swal.fire({
-      icon: 'error',
-      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
-    }).then((result) => {
-      window.location.href = 'offices.php';
-    });
-  });
-  </script>";
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +27,7 @@ if($_SESSION['emp_role'] == 1) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>ยืนยันการทำรายการ - สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -105,11 +84,64 @@ if($_SESSION['emp_role'] == 1) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> Dashboard</h2>
+      <h2 class="fs-5"> ยืนยันรายการวัสดุสำนักงาน</h2>
       <hr>
     </div>
+    
+    
+    <form action="saveorder.php" method="POST">
 
+    <?php 
+    if(!empty($_SESSION['cart'])) { ?>
+    <div class="container">
+        <table class="table table-danger">
+          <thead>
+            <th class="text-center">ลำดับ</th>
+            <th class="text-center">วัสดุสำนักงาน</th>
+            <th class="text-center">จำนวน</th>
+          </thead>
+    <?php
+      $i = 0;
+      foreach($_SESSION['cart'] as $id => $qty) {
+        $sql = "SELECT * FROM `offices` WHERE office_id = '$id'";
+        $query = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_array($query);
+        
 
+        
+        
+        
+        $i++;
+
+      ?>
+
+      
+          <tbody>
+            <td class="text-center"> <?= $i; ?></td>
+            <td class="text-center"> <?= $row['office_name']; ?></td>
+            <td class="text-center"><?= $qty; ?></td>
+          </tbody>
+        
+    <?php   } ?> 
+    <h3 class="text-center">ทั้งหมด <?= $i; ?> รายการ</h3>
+    </table>
+    <div class="text-center">
+      <!-- value  -->
+      <input type="hidden" name="type" value="1">
+      <input type="hidden" name="status" value="1">
+      <input type="hidden" name="emp" value="<?= $_SESSION['emp_id']; ?>">
+      
+      <!-- submit  -->
+      <input type="submit" name="saveorder" value="ยืนยัน" class="btn btn-success">
+      <a href="offices.php?act=cancel" class="btn btn-danger">ยกเลิก</a>
+    </div>
+      </div>
+      </form>
+    <?php
+  } else { ?>
+      <h3 class="text-center">ไม่พบรายการ</h3>
+    <?php } ?>
+    
 
     <!-- end dashboard content  -->
 
@@ -138,6 +170,7 @@ if($_SESSION['emp_role'] == 1) {
       })
 
     })
+
   </script>
 
 </body>

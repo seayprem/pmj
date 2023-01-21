@@ -95,7 +95,13 @@ if(empty($_SESSION['emp_role'])) {
       <hr>
       
       <!-- start add button  -->
+      <?php 
+      if($_SESSION['emp_role'] == 2) {
+
+      
+      ?>
       <a href="addOffice.php" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลวัสดุสำนักงาน</a>
+      <?php } ?>
       <!-- end add button  -->
 
      <!-- Start List Offices Supllier -->
@@ -123,11 +129,22 @@ if(empty($_SESSION['emp_role'])) {
             <td class="text-center"><?= $row['office_name']; ?></td>
             <td class="text-center"><?= number_format($row['office_qty']); ?></td>
             <td class="text-center">
+              <?php 
+              if($_SESSION['emp_role'] == 2) {
+
+              
+              ?>
               <a href="editOffice.php?id=<?= $row['office_id']; ?>" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
               <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['office_id']; ?>"><i class="fa-solid fa-trash"></i></a>
+              <?php } ?>
+              <?php 
+              if($_SESSION['emp_role'] == 1) {
+              ?>
+              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
+              <?php } ?>
             </td>
           </tr>
-          <!-- Start Modal Delete Employee  -->
+          <!-- Start Modal Delete Offices  -->
           <!-- Modal -->
           <div class="modal fade" id="deleteModal<?= $row['office_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

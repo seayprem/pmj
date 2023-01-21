@@ -20,27 +20,6 @@ if(empty($_SESSION['emp_role'])) {
   });
   </script>";
 }
-// Check Permission
-// if you role == 1
-// u can't entry this window
-if($_SESSION['emp_role'] == 1) {
-  header("Location: offices.php");
-  echo '<script src="js/sweetalert2@11.js"></script>';
-  echo '<script src="js/jquery-3.6.3.min.js"></script>';
-  // echo '<script>window.location = "login.php"</script>';
-  echo "<script>
-  $(document).ready(function() {
-    $('div').hide();
-    Swal.fire({
-      icon: 'error',
-      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
-    }).then((result) => {
-      window.location.href = 'offices.php';
-    });
-  });
-  </script>";
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +27,7 @@ if($_SESSION['emp_role'] == 1) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>รายการวัสดุสำนักงาน - สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -105,11 +84,107 @@ if($_SESSION['emp_role'] == 1) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> Dashboard</h2>
+      <h2 class="fs-5"> รายการวัสดุสำนักงาน</h2>
       <hr>
+      <!-- Start Cart Controller  -->
+      <?php 
+      $id = $_GET['id'];
+      $act = $_GET['act'];
+
+      if($act == 'add' && !empty($id)) {
+        if(isset($_SESSION['cart'][$id])) {
+          $_SESSION['cart'][$id]++;
+          header("Location: lists.php");
+        } else {
+          $_SESSION['cart'][$id] = 1;
+          header("Location: lists.php");
+        }
+      }
+
+      if($act == 'decres' && !empty($id)) {
+        if(isset($_SESSION['cart'][$id])) {
+          $_SESSION['cart'][$id]--;
+          header("Location: lists.php");
+        } else {
+          $_SESSION['cart'][$id] = 1;
+          header("Location: lists.php");
+        }
+      }
+
+      if($act == 'remove' && !empty($id)) {
+        
+        unset($_SESSION['cart'][$id]);
+        header("Location: lists.php");
+      }
+
+
+      ?>
+      <!-- End Cart Controller  -->
     </div>
+    
+    <?php 
+    if(!empty($_SESSION['cart'])) { ?>
+    <div class="container">
+        <table class="table table-danger">
+          <thead>
+            <th class="text-center">ลำดับ</th>
+            <th class="text-center">วัสดุสำนักงาน</th>
+            <th class="text-center">จำนวน</th>
+            <th class="text-center">ลบรายการ</th>
+          </thead>
+    <?php
+      $i = 0;
+      foreach($_SESSION['cart'] as $id => $qty) {
+        $sql = "SELECT * FROM `offices` WHERE office_id = '$id'";
+        $query = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_array($query);
+        
 
+        
+        
+        
+        $i++;
 
+      ?>
+
+      
+          <tbody>
+            <td class="text-center"> <?= $i; ?></td>
+            <td class="text-center"> <?= $row['office_name']; ?></td>
+            <td class="text-center">
+            <form class="row g-3 justify-content-center">
+              <div class="col-auto">
+                <a href="lists.php?id=<?= $row['office_id']; ?>&act=decres" id="decres" class="btn btn-primary mb-3">-</a>
+              </div>
+              <div class="col-auto">
+                <input type="number" class="form-control" name="qty" id="qty" value="<?= $qty; ?>">
+              </div>
+            <div class="col-auto">
+              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary mb-3">+</a>
+            </div>
+          </form>
+
+            </td>
+            <td class="text-center">
+              <a href="lists.php?id=<?= $row['office_id']; ?>&act=remove" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+            </td>
+          </tbody>
+        
+    <?php   } ?> 
+    <h3 class="text-center">ทั้งหมด <?= $i; ?> รายการ</h3>
+    </table>
+    <div class="text-center">
+      <a href="offices.php" class="btn btn-pmj">วัสดุสำนักงาน</a>
+      <a href="confirm.php" class="btn btn-success">ยืนยัน</a>
+      <a href="offices.php" class="btn btn-danger">ยกเลิก</a>
+    </div>
+      </div>
+      
+    <?php
+  } else { ?>
+      <h3 class="text-center">ไม่พบรายการ</h3>
+    <?php } ?>
+    
 
     <!-- end dashboard content  -->
 
@@ -138,6 +213,7 @@ if($_SESSION['emp_role'] == 1) {
       })
 
     })
+
   </script>
 
 </body>
