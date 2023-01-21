@@ -1,4 +1,5 @@
 <?php 
+error_reporting(0);
 include('config/db.php');
 session_start();
 if(empty($_SESSION['emp_role'])) {

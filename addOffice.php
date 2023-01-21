@@ -20,6 +20,26 @@ if(empty($_SESSION['emp_role'])) {
   });
   </script>";
 }
+// Check Permission
+// if you role == 1
+// u can't entry this window
+if($_SESSION['emp_role'] == 1) {
+   // header("Location: login.php");
+   echo '<script src="js/sweetalert2@11.js"></script>';
+   echo '<script src="js/jquery-3.6.3.min.js"></script>';
+   // echo '<script>window.location = "login.php"</script>';
+   echo "<script>
+   $(document).ready(function() {
+     $('div').hide();
+     Swal.fire({
+       icon: 'error',
+       title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+     }).then((result) => {
+       window.location.href = 'index.php';
+     });
+   });
+   </script>";
+}
 
 ?>
 <!DOCTYPE html>
@@ -28,7 +48,7 @@ if(empty($_SESSION['emp_role'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>วัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>เพิ่มวัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -91,77 +111,59 @@ if(empty($_SESSION['emp_role'])) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> วัสดุสำนักงาน</h2>
+      <h2 class="fs-5"> เพิ่มวัสดุสำนักงาน</h2>
       <hr>
-      
-      <!-- start add button  -->
-      <a href="addOffice.php" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลวัสดุสำนักงาน</a>
-      <!-- end add button  -->
 
-     <!-- Start List Offices Supllier -->
-     <table class="table table-danger" id="myTable">
-        <thead>
-          <tr>
-            <th class="text-center">ลำดับ</th>
-            <th class="text-center">ชื่อวัสดุสำนักงาน</th>
-            <th class="text-center">จำนวนวัสดุสำนักงาน</th>
-            <th class="text-center">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Start Show Data Offices -->
-          <?php 
-          $sql = "SELECT * FROM `offices` ORDER BY office_id DESC";
-          $query = mysqli_query($conn, $sql);
-          $i = 0;
-          while($row = mysqli_fetch_array($query)) {
+      <!-- Start Data Personal -->
+      <div class="card">
+        <h5 class="card-header">ข้อมูลวัสดุสำนักงาน</h5>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">ชื่อวัสดุสำนักงาน / Office Name</label>
+                    <input type="text" class="form-control" id="name">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">จำนวนวัสดุสำนักงาน / Office Quality</label>
+                    <input type="number" class="form-control" id="qty">
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Data Personal -->
 
-            $i++;
-          ?>
-          <tr>
-            <td class="text-center"><?= $i; ?></td>
-            <td class="text-center"><?= $row['office_name']; ?></td>
-            <td class="text-center"><?= number_format($row['office_qty']); ?></td>
-            <td class="text-center">
-              <a href="editOffice.php?id=<?= $row['office_id']; ?>" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
-              <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['office_id']; ?>"><i class="fa-solid fa-trash"></i></a>
-            </td>
-          </tr>
-          <!-- Start Modal Delete Employee  -->
-          <!-- Modal -->
-          <div class="modal fade" id="deleteModal<?= $row['office_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">คุณต้องการลบ <b><?= $row['office_name']; ?> </b> ใช่หรือไม่?</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>หากได้ทำการคลิกที่ปุ่ม <b>ยืนยัน</b> แล้ว ข้อมูลจะถูกลบออกไปถาวร</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ยกเลิก</button>
-                  <a href="addOfficeController.php?delete=<?= $row['office_id']; ?>" class="btn btn-primary">ยืนยัน</a>
-                </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-grid gap-2 mx-auto mt-2 mb-2">
+                <button class="btn btn-success" type="button" id="save">บันทึกข้อมูลลงระบบ</button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-grid gap-2 mx-auto mt-2 mb-2">
+              <a href="offices.php" class="btn btn-danger" type="button">ยกเลิก</a>
               </div>
             </div>
           </div>
-          <?php } ?>
-          <!-- End Show Data Offices -->
-        </tbody>
-      </table>
-     <!-- End List Offices Supllier -->
-
+        </div>
+      </div>
+      
     </div>
 
 
-    <br><br><br>
     <!-- end dashboard content  -->
 
   </div>
-  
-
-  
 
   <script src="js/jquery-3.6.3.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -177,6 +179,8 @@ if(empty($_SESSION['emp_role'])) {
       $('#myTable').DataTable();
       // End List Data Table 
 
+      // Start Logout 
+
       $('#logout').on('click', function(e) {
         e.preventDefault();
 
@@ -189,6 +193,60 @@ if(empty($_SESSION['emp_role'])) {
           window.location = 'logout.php';
         })
       })
+
+      // End Logout 
+
+      // start save office
+      $('#save').on('click', function(e) {
+
+        // Form Input
+        const name = $('#name').val();
+        const qty = $('#qty').val();
+
+        // Event Clicker
+        e.preventDefault();
+
+        // Validation
+        if(!name || !qty) {
+          Swal.fire({
+            icon: 'error',
+            title: 'กรุณากรอกข้อมูลให้ครบทุกช่อง',
+          })
+        }
+
+        // Ajax => Server
+        $.ajax({
+          url: 'addOfficeController.php',
+          method: 'POST',
+          data: {
+            name: name,
+            qty: qty,
+            save: 'save'
+          },
+          success: function(response) {
+            if(response === 'success') {
+              Swal.fire({
+                icon: 'success',
+                title: 'บันทึกข้อมูลวัสดุสำนักงานสำเร็จ',
+                showConfirmButton: false,
+                timer: 1500
+              }).then((result) => {
+                window.location = 'offices.php';
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'บันทึกข้อมูลวัสดุสำนักงานไม่สำเร็จ โปรดลองอีกครั้ง',
+              }).then((result) => {
+                window.location = 'offices.php';
+              })
+            }
+          }
+        })
+
+
+      })
+      // end save office
 
     })
   </script>
