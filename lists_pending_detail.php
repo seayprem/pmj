@@ -21,6 +21,27 @@ if(empty($_SESSION['emp_role'])) {
   </script>";
 }
 
+// Check Permission
+// if you role == 1
+// u can't entry this window
+if($_SESSION['emp_role'] == 1) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+    }).then((result) => {
+      window.location.href = 'index.php';
+    });
+  });
+  </script>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,7 +117,10 @@ if(empty($_SESSION['emp_role'])) {
 
       <!-- start show status  -->
       <?php 
-      $status_sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id LEFT JOIN employees ON status.emp_id = employees.emp_id";
+      if(isset($_GET['id'])) {
+
+      $ids = $_GET['id'];
+      $status_sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id LEFT JOIN employees ON status.emp_id = employees.emp_id WHERE t_id = $ids";
       $status_query = mysqli_query($conn, $status_sql);
       $status_row = mysqli_fetch_array($status_query);
       ?>
@@ -111,6 +135,7 @@ if(empty($_SESSION['emp_role'])) {
         }
         ?>
       </h2>
+      <?php } ?>
       <h2 class="fs-5 text-center"> 
       <?php 
         if($status_row['emp_id'] == 0) {
@@ -152,7 +177,17 @@ if(empty($_SESSION['emp_role'])) {
      </table>
      <div class="container">
       <div class="text-center mt-3">
-        <a href="history.php" class="btn btn-danger">ย้อนกลับ</a>
+        <input type="hidden" id="status" value="<?= $status_row['stat_id']; ?>">
+        <input type="hidden" id="emp" value="<?= $_SESSION['emp_id']; ?>">
+        <?php 
+        if($status_row['stat_status'] == 1) {
+
+        
+        ?>
+        <a href="#" class="btn btn-success" id="accept">อนุมัติ</a>
+        <a href="#" class="btn btn-danger" id="reject">ไม่อนุมัติ</a>
+        <?php } ?>
+        <a href="lists_pending.php" class="btn btn-danger">ย้อนกลับ</a>
       </div>
      </div>
      <!-- End List tranfer only Supllier -->
@@ -194,6 +229,117 @@ if(empty($_SESSION['emp_role'])) {
           window.location = 'logout.php';
         })
       })
+
+      // start accept
+      $('#accept').on('click', function(e) {
+        // form input
+        const status_id = $('#status').val();
+        const status = 2 // 1. Pending 2. Accept 3.Reject
+        const emp = $('#emp').val();
+
+        // Event Clicker
+        e.preventDefault();
+
+        // Ajax
+
+        Swal.fire({
+          title: 'คุณแน่ใจใช่แล้วหรือไม่ ที่ต้องการอนุมัติ?',
+          showCancelButton: true,
+          confirmButtonText: 'ยืนยัน',
+          cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+              $.ajax({
+                url: 'lists_condition.php',
+                method: 'POST',
+                data: {
+                  id: status_id,
+                  status: status,
+                  emp_id: emp,
+                  accept: 'accept'
+                },
+                success: function(response) {
+                  console.log(response);
+                  if(response === 'success') {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'อนุมัติเรียบร้อยแล้ว',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }).then((result) => {
+                      window.location = 'lists_pending.php';
+                    })
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
+                    }).then((result) => {
+                      window.location = 'lists_pending.php';
+                    })
+                  }
+                }
+              })
+              }
+            })
+      })
+      // end accept
+
+
+      // start reject
+      $('#reject').on('click', function(e) {
+        // form input
+        const status_id = $('#status').val();
+        const status = 3 // 1. Pending 2. Accept 3.Reject
+        const emp = $('#emp').val();
+
+        // Event Clicker
+        e.preventDefault();
+
+        // Ajax
+
+        Swal.fire({
+          title: 'คุณแน่ใจใช่แล้วหรือไม่ ที่ต้องการไม่อนุมัติ?',
+          showCancelButton: true,
+          confirmButtonText: 'ยืนยัน',
+          cancelButtonText: 'ยกเลิก',
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+              $.ajax({
+                url: 'lists_condition.php',
+                method: 'POST',
+                data: {
+                  id: status_id,
+                  status: status,
+                  emp_id: emp,
+                  accept: 'reject'
+                },
+                success: function(response) {
+                  console.log(response);
+                  if(response === 'success') {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'ไม่อนุมัติเรียบร้อยแล้ว',
+                      showConfirmButton: false,
+                      timer: 1500
+                    }).then((result) => {
+                      window.location = 'lists_pending.php';
+                    })
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'ไม่อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
+                    }).then((result) => {
+                      window.location = 'lists_pending.php';
+                    })
+                  }
+                }
+              })
+              }
+            })
+      })
+      // end accept
 
     })
   </script>

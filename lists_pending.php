@@ -21,6 +21,27 @@ if(empty($_SESSION['emp_role'])) {
   </script>";
 }
 
+// Check Permission
+// if you role == 1
+// u can't entry this window
+if($_SESSION['emp_role'] == 1) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+    }).then((result) => {
+      window.location.href = 'index.php';
+    });
+  });
+  </script>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +49,7 @@ if(empty($_SESSION['emp_role'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ประวัติข้อมูลการเบิกวัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>รายการวัสดุสำนักงานที่ยังไม่อนุมัติ | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -91,71 +112,58 @@ if(empty($_SESSION['emp_role'])) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> รายละเอียดประวัติข้อมูลการเบิกวัสดุสำนักงาน</h2>
+      <h2 class="fs-5"> รายการวัสดุสำนักงานที่ยังไม่อนุมัติ</h2>
       <hr>
-
-      <!-- start show status  -->
-      <?php 
-      $status_sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id LEFT JOIN employees ON status.emp_id = employees.emp_id";
-      $status_query = mysqli_query($conn, $status_sql);
-      $status_row = mysqli_fetch_array($status_query);
-      ?>
-      <h2 class="fs-5 text-center">สถานะ: 
-        <?php 
-        if($status_row['stat_status'] == 1) {
-          echo 'รอการอนุมัติ';
-        } else if($status_row['stat_status'] == 2) {
-          echo 'อนุมัติ';
-        } else {
-          echo 'ไม่อนุมัติ';
-        }
-        ?>
-      </h2>
-      <h2 class="fs-5 text-center"> 
-      <?php 
-        if($status_row['emp_id'] == 0) {
-          echo 'ผู้รับผิดชอบในการอนุมัติ: ยังไม่ได้ระบุ';
-        } else {
-          echo 'ผู้รับผิดชอบในการอนุมัติ: ' . $status_row['emp_fname'] . ' ' . $status_row['emp_lname'];
-        }
-      ?>
-      </h2>
-      <!-- end show status  -->
       
-     <!-- Start List tranfer only Supllier -->
-     
-     <table class="table" id="myTable">
+     <!-- Start List Pending Supllier -->
+     <table class="table table-hover" id="myTable">
       <thead>
         <th class="text-center">ลำดับ</th>
-        <th class="text-center">รายการวัสดุสำนักงาน</th>
-        <th class="text-center">จำนวน</th>
+        <th class="text-center">พนักงานที่ทำรายการ</th>
+        <th class="text-center">ประเภทการทำรายการ</th>
+        <th class="text-center">สถานะ</th>
+        <th class="text-center">เวลาทำรายการ</th>
+        <th class="text-center">รายละเอียด</th>
       </thead>
       <tbody>
           <?php 
-        if(isset($_GET['id'])) {
-          $id = $_GET['id'];
-          $sql = "SELECT * FROM transfer_detail INNER JOIN offices ON transfer_detail.office_id = offices.office_id WHERE t_id = $id";
-          $query = mysqli_query($conn, $sql);
+          $emp_id = $_SESSION['emp_id'];
           $i = 0;
+          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id ORDER BY transfer.t_id DESC";
+          $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
+
             $i++;
-         
-        ?>
-        <tr>
-          <td class="text-center"><?= $i; ?></td>
-          <td class="text-center"><?= $row['office_name']; ?></td>
-          <td class="text-center"><?= $row['tdel_qty']; ?></td>
-        </tr>
-        <?php  }
-        } ?>
-      </tbody>
+          
+          ?>
+          <tr class="text-center">
+            <td><?= $i; ?></td>
+            <td><?= $row['emp_fname']; ?> <?= $row['emp_lname']; ?></td>
+            <td>
+              <?php if($row['t_type'] == 1) {
+                echo 'เบิกวัสดุสำนักงาน';
+              } else {
+                echo 'นำเข้า';
+              } ?>
+            </td>
+            <td>
+              <?php if($row['stat_status'] == 2) {
+                echo 'อนุมัติ';
+              } else if($row['stat_status'] == 1) {
+                echo 'รอการอนุมัติ';
+              } else {
+                echo 'ไม่อนุมัติ';
+              } ?>
+            </td>
+            <td><?= $row['t_datetime']; ?></td>
+            <td>
+              <a href="lists_pending_detail.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
+            </td>
+          </tr>
+          <?php } ?>
+        </tbody>
      </table>
-     <div class="container">
-      <div class="text-center mt-3">
-        <a href="history.php" class="btn btn-danger">ย้อนกลับ</a>
-      </div>
-     </div>
-     <!-- End List tranfer only Supllier -->
+     <!-- End List Pending Supllier -->
 
     </div>
 

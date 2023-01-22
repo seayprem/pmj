@@ -124,7 +124,9 @@ if(empty($_SESSION['emp_role'])) {
               } ?>
             </td>
             <td>
-              <?php if($row['stat_status'] == 1) {
+            <?php if($row['stat_status'] == 2) {
+                echo 'อนุมัติ';
+              } else if($row['stat_status'] == 1) {
                 echo 'รอการอนุมัติ';
               } else {
                 echo 'ไม่อนุมัติ';
