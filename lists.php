@@ -117,11 +117,20 @@ if(empty($_SESSION['emp_role'])) {
         header("Location: lists.php");
       }
 
+      if($act=='update')
+        {
+          $amount_array = $_POST['amount'];
+          foreach($amount_array as $id=>$amount)
+          {
+            $_SESSION['cart'][$id]=$amount;
+          }
+        }
+
 
       ?>
       <!-- End Cart Controller  -->
     </div>
-    
+    <form id="frmcart" name="frmcart" method="post" action="?act=update">
     <?php 
     if(!empty($_SESSION['cart'])) { ?>
     <div class="container">
@@ -138,7 +147,7 @@ if(empty($_SESSION['emp_role'])) {
         $sql = "SELECT * FROM `offices` WHERE office_id = '$id'";
         $query = mysqli_query($conn, $sql);
         $row = mysqli_fetch_array($query);
-        
+
         $i++;
 
       ?>
@@ -149,15 +158,15 @@ if(empty($_SESSION['emp_role'])) {
             <td class="text-center"> <?= $row['office_name']; ?></td>
             <td class="text-center">
             <form class="row g-3 justify-content-center">
-              <div class="col-auto">
+              <!-- <div class="col-auto">
                 <a href="lists.php?id=<?= $row['office_id']; ?>&act=decres" id="decres" class="btn btn-primary mb-3">-</a>
+              </div> -->
+              <div class="col-auto text-center">
+                <?php echo "<input type='number' class='form-control' name='amount[$id]' value='$qty' min='1' max='".$row['office_qty']."' style='width: 88px;'/>" ?>
               </div>
-              <div class="col-auto">
-                <input type="number" class="form-control" name="qty" id="qty" value="<?= $qty; ?>" min="1">
-              </div>
-            <div class="col-auto">
-              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary mb-3">+</a>
-            </div>
+            <!-- <div class="col-auto">
+              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" id="incres" class="btn btn-primary mb-3">+</a>
+            </div> -->
           </form>
 
             </td>
@@ -169,6 +178,9 @@ if(empty($_SESSION['emp_role'])) {
     <?php   } ?> 
     <h3 class="text-center">ทั้งหมด <?= $i; ?> รายการ</h3>
     </table>
+    <input type="submit" name="button" value="ปรับปรุง">
+    </form>
+
     <div class="text-center">
       <a href="offices.php" class="btn btn-pmj">วัสดุสำนักงาน</a>
       <a href="confirm.php" class="btn btn-success">ยืนยัน</a>
@@ -207,6 +219,8 @@ if(empty($_SESSION['emp_role'])) {
           window.location = 'logout.php';
         })
       })
+
+
 
     })
 
