@@ -187,7 +187,7 @@ if($_SESSION['emp_role'] == 1) {
         <a href="#" class="btn btn-success" id="accept">อนุมัติ</a>
         <a href="#" class="btn btn-danger" id="reject">ไม่อนุมัติ</a>
         <?php } ?>
-        <a href="lists_pending.php" class="btn btn-danger">ย้อนกลับ</a>
+        <a href="#" class="btn btn-danger" onclick="history.back()">ย้อนกลับ</a>
       </div>
      </div>
      <!-- End List tranfer only Supllier -->
@@ -216,6 +216,7 @@ if($_SESSION['emp_role'] == 1) {
       // Start List Data Table 
       $('#myTable').DataTable();
       // End List Data Table 
+
 
       $('#logout').on('click', function(e) {
         e.preventDefault();
