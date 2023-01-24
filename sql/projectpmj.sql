@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2023 at 03:23 PM
+-- Generation Time: Jan 24, 2023 at 04:34 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -66,8 +66,8 @@ CREATE TABLE `offices` (
 INSERT INTO `offices` (`office_id`, `office_name`, `office_qty`) VALUES
 (1, 'กระดาษ', 0),
 (2, 'หมึก', 0),
-(3, 'ดินสอ', 5),
-(4, 'ปากกา', 10),
+(3, 'ดินสอ', 16),
+(4, 'ปากกา', 25),
 (5, 'ไม้บรรทัด', 0),
 (6, 'ยางลบ', 0),
 (7, 'คลิป', 0),
@@ -185,7 +185,10 @@ CREATE TABLE `status` (
 INSERT INTO `status` (`stat_id`, `stat_status`, `stat_reason`, `emp_id`) VALUES
 (1, 3, '', 2),
 (2, 2, '', 2),
-(3, 2, '', 2);
+(3, 2, '', 2),
+(4, 2, '', 6),
+(5, 1, '', 0),
+(6, 1, '', 0);
 
 -- --------------------------------------------------------
 
@@ -208,7 +211,10 @@ CREATE TABLE `transfer` (
 INSERT INTO `transfer` (`t_id`, `t_type`, `stat_id`, `emp_id`, `t_datetime`) VALUES
 (1, 1, 1, 7, '2023-01-21 17:03:00'),
 (2, 1, 2, 1, '2023-01-21 17:18:13'),
-(3, 1, 3, 7, '2023-01-21 17:52:21');
+(3, 1, 3, 7, '2023-01-21 17:52:21'),
+(4, 1, 4, 1, '2023-01-23 03:23:07'),
+(5, 1, 5, 1, '2023-01-24 15:02:54'),
+(6, 1, 6, 1, '2023-01-24 15:06:20');
 
 -- --------------------------------------------------------
 
@@ -233,7 +239,13 @@ INSERT INTO `transfer_detail` (`tdel_id`, `t_id`, `office_id`, `tdel_qty`) VALUE
 (3, 2, 4, 8),
 (4, 2, 3, 4),
 (5, 3, 3, 12),
-(6, 3, 4, 6);
+(6, 3, 4, 6),
+(7, 4, 4, 5),
+(8, 4, 3, 1),
+(9, 5, 4, 3),
+(10, 5, 3, 2),
+(11, 6, 4, 5),
+(12, 6, 3, 4);
 
 --
 -- Indexes for dumped tables
@@ -289,19 +301,19 @@ ALTER TABLE `offices`
 -- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
-  MODIFY `stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `transfer`
 --
 ALTER TABLE `transfer`
-  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `transfer_detail`
 --
 ALTER TABLE `transfer_detail`
-  MODIFY `tdel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `tdel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
