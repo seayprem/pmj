@@ -41,6 +41,11 @@ if(isset($_POST['saveorder'])) {
     $transfer_detail_sql = "INSERT INTO `transfer_detail` (t_id, office_id, tdel_qty) VALUES ('$t_id', '$id', $qty)";
     $transfer_detail_query = mysqli_query($conn, $transfer_detail_sql);
 
+
+    $stock_sql = "UPDATE `offices` SET `office_qty`= '".$office_row['office_qty']."' - $qty WHERE office_id = $id";
+    $stock_query = mysqli_query($conn, $stock_sql);
+
+
   }
 
   if($transfer_detail_query) {

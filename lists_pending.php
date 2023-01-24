@@ -129,7 +129,7 @@ if($_SESSION['emp_role'] == 1) {
           <?php 
           $emp_id = $_SESSION['emp_id'];
           $i = 0;
-          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id ORDER BY transfer.t_id DESC";
+          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 ORDER BY transfer.t_id DESC";
           $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
 

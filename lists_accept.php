@@ -20,25 +20,26 @@ if(empty($_SESSION['emp_role'])) {
   });
   </script>";
 }
+
 // Check Permission
 // if you role == 1
 // u can't entry this window
 if($_SESSION['emp_role'] == 1) {
-   // header("Location: login.php");
-   echo '<script src="js/sweetalert2@11.js"></script>';
-   echo '<script src="js/jquery-3.6.3.min.js"></script>';
-   // echo '<script>window.location = "login.php"</script>';
-   echo "<script>
-   $(document).ready(function() {
-     $('div').hide();
-     Swal.fire({
-       icon: 'error',
-       title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
-     }).then((result) => {
-       window.location.href = 'index.php';
-     });
-   });
-   </script>";
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+    }).then((result) => {
+      window.location.href = 'index.php';
+    });
+  });
+  </script>";
 }
 
 ?>
@@ -48,7 +49,7 @@ if($_SESSION['emp_role'] == 1) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เจ้าหน้าที่ | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>รายการวัสดุสำนักงานที่อนุมัติ | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -111,88 +112,67 @@ if($_SESSION['emp_role'] == 1) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> เจ้าหน้าที่พนักงาน</h2>
+      <h2 class="fs-5"> รายการวัสดุสำนักงานที่ยังไม่อนุมัติ</h2>
       <hr>
       
-      <!-- start add button  -->
-      <a href="addEmployee.php" class="btn btn-success mb-3"><i class="fa-solid fa-user-plus"></i> เพิ่มข้อมูลเจ้าหน้าที่พนักงาน</a>
-      <!-- end add button  -->
-
-      <!-- Start List Employee -->
-      <table class="table table-hover" id="myTable">
-        <thead>
-          <tr>
-            <th class="text-center">ลำดับ</th>
-            <th class="text-center">ชื่อผู้ใช้</th>
-            <th class="text-center">ชื่อจริง</th>
-            <th class="text-center">นามสกุล</th>
-            <th class="text-center">ตำแหน่งงาน</th>
-            <th class="text-center">สิทธิ์การเข้าถึง</th>
-            <th class="text-center">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Start Show Data Employees -->
+     <!-- Start List Pending Supllier -->
+     <table class="table table-hover" id="myTable">
+      <thead>
+        <th class="text-center">ลำดับ</th>
+        <th class="text-center">พนักงานที่ทำรายการ</th>
+        <th class="text-center">ประเภทการทำรายการ</th>
+        <th class="text-center">สถานะ</th>
+        <th class="text-center">เวลาทำรายการ</th>
+        <th class="text-center">รายละเอียด</th>
+      </thead>
+      <tbody>
           <?php 
-          $sql = "SELECT * FROM `employees`";
-          $query = mysqli_query($conn, $sql);
+          $emp_id = $_SESSION['emp_id'];
           $i = 0;
+          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 2 ORDER BY transfer.t_id DESC";
+          $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
 
             $i++;
+          
           ?>
-          <tr>
-            <td class="text-center"><?= $i; ?></td>
-            <td><?= $row['emp_user']; ?></td>
-            <td><?= $row['emp_fname']; ?></td>
-            <td><?= $row['emp_lname']; ?></td>
-            <td class="text-center"><?= $row['emp_position']; ?></td>
-            <td class="text-center">
-              <?php 
-              if($row['emp_role'] == 1) {
-                echo 'เจ้าหน้าที่พนักงาน';
+          <tr class="text-center">
+            <td><?= $i; ?></td>
+            <td><?= $row['emp_fname']; ?> <?= $row['emp_lname']; ?></td>
+            <td>
+              <?php if($row['t_type'] == 1) {
+                echo 'เบิกวัสดุสำนักงาน';
               } else {
-                echo 'ผู้ดูแลระบบ';
-              }
-              ?>
+                echo 'นำเข้า';
+              } ?>
             </td>
-            <td class="text-center">
-              <a href="editEmployee.php?id=<?= $row['emp_id']; ?>" class="btn btn-warning" id="edit"><i class="fa-solid fa-pencil"></i></a>
-              <a href="#" class="btn btn-danger" id="delete" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['emp_id']; ?>"><i class="fa-solid fa-trash"></i></a>
+            <td>
+              <?php if($row['stat_status'] == 2) {
+                echo 'อนุมัติ';
+              } else if($row['stat_status'] == 1) {
+                echo 'รอการอนุมัติ';
+              } else {
+                echo 'ไม่อนุมัติ';
+              } ?>
+            </td>
+            <td><?= $row['t_datetime']; ?></td>
+            <td>
+              <a href="lists_pending_detail.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
             </td>
           </tr>
-          <!-- Start Modal Delete Employee  -->
-          <!-- Modal -->
-          <div class="modal fade" id="deleteModal<?= $row['emp_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">คุณต้องการลบ <b><?= $row['emp_fname']; ?> <?= $row['emp_lname']; ?></b> ใช่หรือไม่?</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>หากได้ทำการคลิกที่ปุ่ม <b>ยืนยัน</b> แล้ว ข้อมูลจะถูกลบออกไปถาวร</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ยกเลิก</button>
-                  <a href="addEmployeeController.php?delete=<?= $row['emp_id']; ?>" class="btn btn-primary">ยืนยัน</a>
-                </div>
-              </div>
-            </div>
-          </div>
           <?php } ?>
-          <!-- End Show Data Employees -->
         </tbody>
-      </table>
-      <!-- End List Employee -->
+     </table>
+     <!-- End List Pending Supllier -->
 
     </div>
 
 
-
+    <br><br><br>
     <!-- end dashboard content  -->
 
   </div>
+  
 
   
 

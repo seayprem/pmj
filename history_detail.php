@@ -96,7 +96,8 @@ if(empty($_SESSION['emp_role'])) {
 
       <!-- start show status  -->
       <?php 
-      $status_sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id LEFT JOIN employees ON status.emp_id = employees.emp_id";
+      $ids = $_GET['id'];
+      $status_sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id LEFT JOIN employees ON status.emp_id = employees.emp_id WHERE t_id = $ids";
       $status_query = mysqli_query($conn, $status_sql);
       $status_row = mysqli_fetch_array($status_query);
       ?>

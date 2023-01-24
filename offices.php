@@ -105,7 +105,7 @@ if(empty($_SESSION['emp_role'])) {
       <!-- end add button  -->
 
      <!-- Start List Offices Supllier -->
-     <table class="table" id="myTable">
+     <table class="table table-hover" id="myTable">
         <thead>
           <tr>
             <th class="text-center">ลำดับ</th>
@@ -117,7 +117,7 @@ if(empty($_SESSION['emp_role'])) {
         <tbody>
           <!-- Start Show Data Offices -->
           <?php 
-          $sql = "SELECT * FROM `offices` ORDER BY office_id DESC";
+          $sql = "SELECT * FROM `offices` ORDER BY office_qty DESC";
           $query = mysqli_query($conn, $sql);
           $i = 0;
           while($row = mysqli_fetch_array($query)) {
@@ -140,9 +140,12 @@ if(empty($_SESSION['emp_role'])) {
               <?php 
               if($_SESSION['emp_role'] == 1 && $row['office_qty'] >= 1) {
               ?>
-              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
-              <?php } else { ?>
-              <a href="#" class="btn btn-primary">ไม่สามารถเบิกได้</a>
+              <a href="lists.php?p_id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
+              <?php } else if($_SESSION['emp_role'] == 2) { ?>
+                <a href="#" class="btn btn-sucess">นำเข้าวัสดุ</a>
+                <?php
+              } else { ?>
+              <a href="#" class="btn btn-danger disabled">ไม่สามารถเบิกได้</a>
               <?php } ?>
             </td>
           </tr>

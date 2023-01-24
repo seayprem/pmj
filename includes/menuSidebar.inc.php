@@ -20,9 +20,13 @@
   </li>
   <li class=""><a href="employees.php" class="text-decoration-none px-3 py-2 d-block"> เจ้าหน้าที่พนักงาน</a>
   </li>
+  <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"> นำเข้าวัสดุสำนักงาน</a>
+  </li>
   <li class=""><a href="lists_pending.php" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุที่ยังไม่อนุมัติ</a>
   </li>
-  <li class=""><a href="#" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุที่อนุมัติ</a>
+  <li class=""><a href="lists_accept.php" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุที่อนุมัติ</a>
+  </li>
+  <li class=""><a href="lists_reject.php" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุที่ปฏิเสธ</a>
   </li>
   <?php } ?>
   <!-- Logout -->

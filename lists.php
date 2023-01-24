@@ -88,112 +88,95 @@ if(empty($_SESSION['emp_role'])) {
       <hr>
       <!-- Start Cart Controller  -->
       <?php 
-      $id = $_GET['id'];
+      $p_id = $_GET['p_id']; 
       $act = $_GET['act'];
-
-      if($act == 'add' && !empty($id)) {
-        if(isset($_SESSION['cart'][$id])) {
-          $_SESSION['cart'][$id]++;
+    
+      if($act=='add' && !empty($p_id))
+      {
+        if(isset($_SESSION['cart'][$p_id]))
+        {
+          $_SESSION['cart'][$p_id]++;
           header("Location: lists.php");
-        } else {
-          $_SESSION['cart'][$id] = 1;
+        }
+        else
+        {
+          $_SESSION['cart'][$p_id]=1;
           header("Location: lists.php");
         }
       }
-
-      if($act == 'decres' && !empty($id)) {
-        if(isset($_SESSION['cart'][$id])) {
-          $_SESSION['cart'][$id]--;
-          header("Location: lists.php");
-        } else {
-          $_SESSION['cart'][$id] = 1;
-          header("Location: lists.php");
-        }
-      }
-
-      if($act == 'remove' && !empty($id)) {
-        
-        unset($_SESSION['cart'][$id]);
+    
+      if($act=='remove' && !empty($p_id))  //ยกเลิกการสั่งซื้อ
+      {
+        unset($_SESSION['cart'][$p_id]);
         header("Location: lists.php");
       }
-
+    
       if($act=='update')
+      {
+        $amount_array = $_POST['amount'];
+        foreach($amount_array as $p_id=>$amount)
         {
-          $amount_array = $_POST['amount'];
-          foreach($amount_array as $id=>$amount)
-          {
-            $_SESSION['cart'][$id]=$amount;
-          }
+          $_SESSION['cart'][$p_id]=$amount;
+          header("Location: lists.php");
         }
+      }
 
 
       ?>
       <!-- End Cart Controller  -->
-    </div>
-    <form id="frmcart" name="frmcart" method="post" action="?act=update">
-    <?php 
-    if(!empty($_SESSION['cart'])) { ?>
-    <div class="container">
-        <table class="table table-danger">
-          <thead>
-            <th class="text-center">ลำดับ</th>
-            <th class="text-center">วัสดุสำนักงาน</th>
-            <th class="text-center">จำนวน</th>
-            <th class="text-center">ลบรายการ</th>
-          </thead>
-    <?php
-      $i = 0;
-      foreach($_SESSION['cart'] as $id => $qty) {
-        $sql = "SELECT * FROM `offices` WHERE office_id = '$id'";
-        $query = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_array($query);
-
-        $i++;
-
-      ?>
+      <div class="container">
 
       
-          <tbody>
-            <td class="text-center"> <?= $i; ?></td>
-            <td class="text-center"> <?= $row['office_name']; ?></td>
-            <td class="text-center">
-            <form class="row g-3 justify-content-center">
-              <!-- <div class="col-auto">
-                <a href="lists.php?id=<?= $row['office_id']; ?>&act=decres" id="decres" class="btn btn-primary mb-3">-</a>
-              </div> -->
-              <div class="col-auto text-center">
-                <?php echo "<input type='number' class='form-control' name='amount[$id]' value='$qty' min='1' max='".$row['office_qty']."' style='width: 88px;'/>" ?>
-              </div>
-            <!-- <div class="col-auto">
-              <a href="lists.php?id=<?= $row['office_id']; ?>&act=add" id="incres" class="btn btn-primary mb-3">+</a>
-            </div> -->
-          </form>
-
-            </td>
-            <td class="text-center">
-              <a href="lists.php?id=<?= $row['office_id']; ?>&act=remove" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-            </td>
-          </tbody>
-        
-    <?php   } ?> 
-    <h3 class="text-center">ทั้งหมด <?= $i; ?> รายการ</h3>
-    </table>
-    <input type="submit" name="button" value="ปรับปรุง">
-    </form>
-
-    <div class="text-center">
-      <a href="offices.php" class="btn btn-pmj">วัสดุสำนักงาน</a>
-      <a href="confirm.php" class="btn btn-success">ยืนยัน</a>
-      <a href="offices.php" class="btn btn-danger">ยกเลิก</a>
-    </div>
-      </div>
-      
-    <?php
-  } else { ?>
-      <h3 class="text-center">ไม่พบรายการ</h3>
+      <form id="frmcart" name="frmcart" method="post" action="?act=update">
+        <?php if(!empty($_SESSION['cart'])) { ?>
+  <table class="table">
+    <thead>
+      <tr class="text-center">
+        <th>ลำดับ</th>
+        <th>ชื่อวัสดุสำนักงาน</th>
+        <th>จำนวน</th>
+        <th>ลบรายการ</th>
+      </tr>
+    </thead>
     <?php } ?>
-    
+<?php
+$total=0;
+if(!empty($_SESSION['cart']))
+{
+  $i = 0;
+	foreach($_SESSION['cart'] as $p_id=>$qty)
+	{
+    $i++;
+		$sql = "select * from offices where office_id=$p_id";
+		$query = mysqli_query($conn, $sql);
+		$row = mysqli_fetch_array($query);
+		echo "<tr class='text-center'>";
+		echo "<td>" . $i . "</td>";
+		echo "<td>" . $row["office_name"] . "</td>";
+		echo "<td><input type='number' name='amount[$p_id]' value='$qty' size='2' min='1' max='".$row['office_qty']."'/></td>";
+		echo "<td align='center'><a href='lists.php?p_id=$p_id&act=remove' class='btn btn-danger'>ลบรายการ</a></td>";
+		echo "</tr>";
+	}
+} else {
+  echo '<h3 class="text-center">ไม่พบรายการ</h3>';
+}
+?>
+<?php 
+if(!empty($_SESSION['cart'])) {
 
+
+?>
+<tr>
+<td><a href="offices.php" class="btn btn-pmj">กลับหน้ารายการวัสดุสำนักงาน</a></td>
+<td colspan="4" align="right">
+    <input type="submit" name="button" id="button" class="btn btn-secondary" value="ปรับปรุง" />
+    <input type="button" name="Submit2" value="ทำการเบิกวัสดุสำนักงาน" class="btn btn-primary" onclick="window.location='confirm.php';" />
+</td>
+</tr>
+</table>
+</form>
+<?php } ?>
+</div>
     <!-- end dashboard content  -->
 
   </div>
