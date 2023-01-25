@@ -93,6 +93,15 @@ if(empty($_SESSION['emp_role'])) {
     <div class="dashboard-content px-3 pt-4">
       <h2 class="fs-5"> ประวัติข้อมูลการเบิกวัสดุสำนักงาน</h2>
       <hr>
+      <div class="mb-3">
+        <a href="history.php" class="btn btn-success">แสดงทั้งหมด</a>
+        <a href="#" class="btn btn-success">แสดงเฉพาะอนุมัติ</a>
+        <a href="#" class="btn btn-success">แสดงเฉพาะไม่อนุมัติ</a>
+        <a href="#" class="btn btn-success">แสดงเฉพาะรออนุมัติ</a>
+      </div>
+      <div class="mb-3">
+
+      </div>
       
      <!-- Start List tranfer only Supllier -->
       <table class="table" id="myTable">
