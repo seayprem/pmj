@@ -269,14 +269,14 @@ if($_SESSION['emp_role'] == 1) {
                       showConfirmButton: false,
                       timer: 1500
                     }).then((result) => {
-                      window.location = 'lists_pending.php';
+                      window.location = 'lists_accept.php';
                     })
                   } else {
                     Swal.fire({
                       icon: 'error',
                       title: 'อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
                     }).then((result) => {
-                      window.location = 'lists_pending.php';
+                      window.location = 'lists_accept.php';
                     })
                   }
                 }
@@ -325,14 +325,14 @@ if($_SESSION['emp_role'] == 1) {
                       showConfirmButton: false,
                       timer: 1500
                     }).then((result) => {
-                      window.location = 'lists_pending.php';
+                      window.location = 'lists_reject.php';
                     })
                   } else {
                     Swal.fire({
                       icon: 'error',
                       title: 'ไม่อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
                     }).then((result) => {
-                      window.location = 'lists_pending.php';
+                      window.location = 'lists_reject.php';
                     })
                   }
                 }

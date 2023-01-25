@@ -21,6 +21,27 @@ if(empty($_SESSION['emp_role'])) {
   </script>";
 }
 
+// Check Permission
+// if you role == 1
+// u can't entry this window
+if($_SESSION['emp_role'] == 1) {
+  // header("Location: login.php");
+  echo '<script src="js/sweetalert2@11.js"></script>';
+  echo '<script src="js/jquery-3.6.3.min.js"></script>';
+  // echo '<script>window.location = "login.php"</script>';
+  echo "<script>
+  $(document).ready(function() {
+    $('div').hide();
+    Swal.fire({
+      icon: 'error',
+      title: 'คุณไม่มีสิทธิ์ในการเข้าถึงหน้าต่างนี้',
+    }).then((result) => {
+      window.location.href = 'index.php';
+    });
+  });
+  </script>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +49,7 @@ if(empty($_SESSION['emp_role'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>วัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>ประวัติข้อมูลการเบิกวัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -91,88 +112,46 @@ if(empty($_SESSION['emp_role'])) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> วัสดุสำนักงาน</h2>
+      <h2 class="fs-5"> ประวัติข้อมูลการเบิกวัสดุสำนักงาน</h2>
       <hr>
       
-      <!-- start add button  -->
-      <?php 
-      if($_SESSION['emp_role'] == 2) {
-
-      
-      ?>
-      <a href="addOffice.php" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลวัสดุสำนักงาน</a>
-      <?php } ?>
-      <!-- end add button  -->
-
-     <!-- Start List Offices Supllier -->
-     <table class="table table-hover" id="myTable">
+     <!-- Start List tranfer only Supllier -->
+      <table class="table table-hover" id="myTable">
         <thead>
-          <tr>
-            <th class="text-center">ลำดับ</th>
-            <th class="text-center">ชื่อวัสดุสำนักงาน</th>
-            <th class="text-center">จำนวนวัสดุสำนักงาน</th>
-            <th class="text-center">จัดการ</th>
-          </tr>
+          <th class="text-center">ลำดับ</th>
+          <th class="text-center">ประเภทการทำรายการ</th>
+          <th class="text-center">เวลาทำรายการ</th>
+          <th class="text-center">รายละเอียด</th>
         </thead>
         <tbody>
-          <!-- Start Show Data Offices -->
           <?php 
-          $sql = "SELECT * FROM `offices` ORDER BY office_qty DESC";
-          $query = mysqli_query($conn, $sql);
+          $emp_id = $_SESSION['emp_id'];
           $i = 0;
+          $sql = "SELECT * FROM `transfer` WHERE transfer.emp_id = $emp_id ORDER BY transfer.t_id DESC";
+          $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
 
             $i++;
+          
           ?>
-          <tr class="<?php if($row['office_qty'] == 0) { echo 'table-danger'; } ?>">
-            <td class="text-center"><?= $i; ?></td>
-            <td class="text-center"><?= $row['office_name']; ?></td>
-            <td class="text-center"><?= number_format($row['office_qty']); ?></td>
-            <td class="text-center">
-              <?php 
-              if($_SESSION['emp_role'] == 2) {
-
-              
-              ?>
-              <a href="editOffice.php?id=<?= $row['office_id']; ?>" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
-              <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['office_id']; ?>"><i class="fa-solid fa-trash"></i></a>
-              <?php } ?>
-              <?php 
-              if($_SESSION['emp_role'] == 1 && $row['office_qty'] >= 1) {
-              ?>
-              <a href="lists.php?p_id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
-              <?php } else if($_SESSION['emp_role'] == 2) { ?>
-                <a href="listsImport.php?p_id=<?= $row['office_id']; ?>&act=add" class="btn btn-success">นำเข้าวัสดุ</a>
-                <?php
-              } else { ?>
-              <a href="#" class="btn btn-danger disabled">ไม่สามารถเบิกได้</a>
-              <?php } ?>
+          <tr class="text-center">
+            <td><?= $i; ?></td>
+            <td>
+              <?php if($row['t_type'] == 1) {
+                echo 'เบิกวัสดุสำนักงาน';
+              } else {
+                echo 'นำเข้า';
+              } ?>
+            </td>
+            <td><?= $row['t_datetime']; ?></td>
+            <td>
+              <a href="history_detailImport.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
             </td>
           </tr>
-          <!-- Start Modal Delete Offices  -->
-          <!-- Modal -->
-          <div class="modal fade" id="deleteModal<?= $row['office_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">คุณต้องการลบ <b><?= $row['office_name']; ?> </b> ใช่หรือไม่?</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>หากได้ทำการคลิกที่ปุ่ม <b>ยืนยัน</b> แล้ว ข้อมูลจะถูกลบออกไปถาวร</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ยกเลิก</button>
-                  <a href="addOfficeController.php?delete=<?= $row['office_id']; ?>" class="btn btn-primary">ยืนยัน</a>
-                </div>
-              </div>
-            </div>
-          </div>
           <?php } ?>
-          <!-- End Show Data Offices -->
         </tbody>
       </table>
-     <!-- End List Offices Supllier -->
+     <!-- End List tranfer only Supllier -->
 
     </div>
 

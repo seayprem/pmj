@@ -28,7 +28,7 @@ if(empty($_SESSION['emp_role'])) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>วัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
+  <title>ประวัติข้อมูลการเบิกวัสดุสำนักงาน | สํานักงานพัฒนาสังคมและความมั่นคงของมนุษย์ นครราชสีมา</title>
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/fonts.css">
@@ -91,88 +91,52 @@ if(empty($_SESSION['emp_role'])) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> วัสดุสำนักงาน</h2>
+      <h2 class="fs-5"> รายละเอียดประวัติข้อมูลการเบิกวัสดุสำนักงาน</h2>
       <hr>
-      
-      <!-- start add button  -->
+
+      <!-- start show status  -->
       <?php 
-      if($_SESSION['emp_role'] == 2) {
-
-      
+      $ids = $_GET['id'];
+      $status_sql = "SELECT * FROM `transfer` WHERE t_id = $ids";
+      $status_query = mysqli_query($conn, $status_sql);
+      $status_row = mysqli_fetch_array($status_query);
       ?>
-      <a href="addOffice.php" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลวัสดุสำนักงาน</a>
-      <?php } ?>
-      <!-- end add button  -->
-
-     <!-- Start List Offices Supllier -->
-     <table class="table table-hover" id="myTable">
-        <thead>
-          <tr>
-            <th class="text-center">ลำดับ</th>
-            <th class="text-center">ชื่อวัสดุสำนักงาน</th>
-            <th class="text-center">จำนวนวัสดุสำนักงาน</th>
-            <th class="text-center">จัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Start Show Data Offices -->
+      <!-- end show status  -->
+      
+     <!-- Start List tranfer only Supllier -->
+     
+     <table class="table" id="myTable">
+      <thead>
+        <th class="text-center">ลำดับ</th>
+        <th class="text-center">รายการวัสดุสำนักงาน</th>
+        <th class="text-center">จำนวน</th>
+      </thead>
+      <tbody>
           <?php 
-          $sql = "SELECT * FROM `offices` ORDER BY office_qty DESC";
+        if(isset($_GET['id'])) {
+          $id = $_GET['id'];
+          $sql = "SELECT * FROM transfer_detail INNER JOIN offices ON transfer_detail.office_id = offices.office_id WHERE t_id = $id";
           $query = mysqli_query($conn, $sql);
           $i = 0;
           while($row = mysqli_fetch_array($query)) {
-
             $i++;
-          ?>
-          <tr class="<?php if($row['office_qty'] == 0) { echo 'table-danger'; } ?>">
-            <td class="text-center"><?= $i; ?></td>
-            <td class="text-center"><?= $row['office_name']; ?></td>
-            <td class="text-center"><?= number_format($row['office_qty']); ?></td>
-            <td class="text-center">
-              <?php 
-              if($_SESSION['emp_role'] == 2) {
-
-              
-              ?>
-              <a href="editOffice.php?id=<?= $row['office_id']; ?>" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
-              <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $row['office_id']; ?>"><i class="fa-solid fa-trash"></i></a>
-              <?php } ?>
-              <?php 
-              if($_SESSION['emp_role'] == 1 && $row['office_qty'] >= 1) {
-              ?>
-              <a href="lists.php?p_id=<?= $row['office_id']; ?>&act=add" class="btn btn-primary">เพิ่มลงรายการ</a>
-              <?php } else if($_SESSION['emp_role'] == 2) { ?>
-                <a href="listsImport.php?p_id=<?= $row['office_id']; ?>&act=add" class="btn btn-success">นำเข้าวัสดุ</a>
-                <?php
-              } else { ?>
-              <a href="#" class="btn btn-danger disabled">ไม่สามารถเบิกได้</a>
-              <?php } ?>
-            </td>
-          </tr>
-          <!-- Start Modal Delete Offices  -->
-          <!-- Modal -->
-          <div class="modal fade" id="deleteModal<?= $row['office_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">คุณต้องการลบ <b><?= $row['office_name']; ?> </b> ใช่หรือไม่?</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>หากได้ทำการคลิกที่ปุ่ม <b>ยืนยัน</b> แล้ว ข้อมูลจะถูกลบออกไปถาวร</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ยกเลิก</button>
-                  <a href="addOfficeController.php?delete=<?= $row['office_id']; ?>" class="btn btn-primary">ยืนยัน</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <?php } ?>
-          <!-- End Show Data Offices -->
-        </tbody>
-      </table>
-     <!-- End List Offices Supllier -->
+         
+        ?>
+        <tr>
+          <td class="text-center"><?= $i; ?></td>
+          <td class="text-center"><?= $row['office_name']; ?></td>
+          <td class="text-center"><?= $row['tdel_qty']; ?></td>
+        </tr>
+        <?php  }
+        } ?>
+      </tbody>
+     </table>
+     <div class="container">
+      <div class="text-center mt-3">
+        <a href="historyImport.php" class="btn btn-danger">ย้อนกลับ</a>
+      </div>
+     </div>
+     <!-- End List tranfer only Supllier -->
 
     </div>
 
