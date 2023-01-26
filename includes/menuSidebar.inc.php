@@ -30,6 +30,8 @@
   </li>
   <li class=""><a href="lists_reject.php" class="text-decoration-none px-3 py-2 d-block"> รายการวัสดุที่ปฏิเสธ</a>
   </li>
+  <li class=""><a href="lists_reject.php" class="text-decoration-none px-3 py-2 d-block"> ออกรายงาน</a>
+  </li>
   <?php } ?>
   <!-- Logout -->
   <hr class="h-color mx-2">
