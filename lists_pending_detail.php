@@ -170,6 +170,7 @@ if($_SESSION['emp_role'] == 1) {
           <td class="text-center"><?= $i; ?></td>
           <td class="text-center"><?= $row['office_name']; ?></td>
           <td class="text-center"><?= $row['tdel_qty']; ?></td>
+          
         </tr>
         <?php  }
         } ?>
@@ -177,6 +178,7 @@ if($_SESSION['emp_role'] == 1) {
      </table>
      <div class="container">
       <div class="text-center mt-3">
+        <input type="hidden" id="t_id" value="<?= $id; ?>">
         <input type="hidden" id="status" value="<?= $status_row['stat_id']; ?>">
         <input type="hidden" id="emp" value="<?= $_SESSION['emp_id']; ?>">
         <?php 
@@ -286,61 +288,117 @@ if($_SESSION['emp_role'] == 1) {
       })
       // end accept
 
-
-      // start reject
       $('#reject').on('click', function(e) {
-        // form input
+        e.preventDefault();
+
         const status_id = $('#status').val();
         const status = 3 // 1. Pending 2. Accept 3.Reject
         const emp = $('#emp').val();
-
-        // Event Clicker
-        e.preventDefault();
-
-        // Ajax
+        const t_id = $('#t_id').val();
 
         Swal.fire({
-          title: 'คุณแน่ใจใช่แล้วหรือไม่ ที่ต้องการไม่อนุมัติ?',
+          title: 'คุณแน่ใจใช่แล้วหรือไม่ ที่ต้องการอนุมัติ?',
           showCancelButton: true,
           confirmButtonText: 'ยืนยัน',
           cancelButtonText: 'ยกเลิก',
         }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
-              $.ajax({
-                url: 'lists_condition.php',
-                method: 'POST',
-                data: {
-                  id: status_id,
-                  status: status,
-                  emp_id: emp,
-                  accept: 'reject'
-                },
-                success: function(response) {
-                  console.log(response);
-                  if(response === 'success') {
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'ไม่อนุมัติเรียบร้อยแล้ว',
-                      showConfirmButton: false,
-                      timer: 1500
-                    }).then((result) => {
-                      window.location = 'lists_reject.php';
-                    })
-                  } else {
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'ไม่อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
-                    }).then((result) => {
-                      window.location = 'lists_reject.php';
-                    })
-                  }
-                }
-              })
+            $.ajax({
+            url: 'lists_condition_reject.php',
+            method: 'POST',
+            data: {
+              id: status_id,
+              status: status,
+              emp_id: emp,
+              t_id: t_id,
+              reject: 'reject'
+            },
+            success: function(res) {
+              console.log(res);
+              if(res === 'success') {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'ไม่อนุมัติเรียบร้อยแล้ว',
+                  showConfirmButton: false,
+                  timer: 1500
+                }).then((result) => {
+                  window.location = 'lists_reject.php';
+                })
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'ไม่อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
+                }).then((result) => {
+                  window.location = 'lists_reject.php';
+                })
               }
-            })
+            }
+          })
+          }
+        })
+
+        
+
+
       })
-      // end accept
+
+      // // start reject
+      // $('#reject').on('click', function(e) {
+      //   // form input
+      //   const t_id = $('#t_id').val();
+      //   const status_id = $('#status').val();
+      //   const status = 3 // 1. Pending 2. Accept 3.Reject
+      //   const emp = $('#emp').val();
+
+      //   // Event Clicker
+      //   e.preventDefault();
+
+      //   // Ajax
+
+      //   Swal.fire({
+      //     title: 'คุณแน่ใจใช่แล้วหรือไม่ ที่ต้องการไม่อนุมัติ?',
+      //     showCancelButton: true,
+      //     confirmButtonText: 'ยืนยัน',
+      //     cancelButtonText: 'ยกเลิก',
+      //   }).then((result) => {
+      //     /* Read more about isConfirmed, isDenied below */
+      //     if (result.isConfirmed) {
+      //         $.ajax({
+      //           url: 'lists_condition_reject.php',
+      //           method: 'POST',
+      //           data: {
+      //             id: status_id,
+      //             t_id: t_id,
+      //             status: status,
+      //             emp_id: emp,
+      //             accept: 'reject'
+      //           },
+      //           success: function(response) {
+      //             console.log(response);
+      //             console.log(t_id);
+      //             // if(response === 'success') {
+      //             //   Swal.fire({
+      //             //     icon: 'success',
+      //             //     title: 'ไม่อนุมัติเรียบร้อยแล้ว',
+      //             //     showConfirmButton: true,
+      //             //     // timer: 1500
+      //             //   }).then((result) => {
+      //             //     window.location = 'lists_reject.php';
+      //             //   })
+      //             // } else {
+      //             //   Swal.fire({
+      //             //     icon: 'error',
+      //             //     title: 'ไม่อนุมัติไม่สำเร็จ โปรดลองอีกครั้ง',
+      //             //   }).then((result) => {
+      //             //     window.location = 'lists_reject.php';
+      //             //   })
+      //             // }
+      //           }
+      //         })
+      //         }
+      //       })
+      // })
+      // // end accept
 
     })
   </script>

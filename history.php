@@ -110,6 +110,7 @@ if(empty($_SESSION['emp_role'])) {
           <th class="text-center">ประเภทการทำรายการ</th>
           <th class="text-center">สถานะ</th>
           <th class="text-center">เวลาทำรายการ</th>
+          <th class="text-center">เวลาอนุมัติ</th>
           <th class="text-center">รายละเอียด</th>
         </thead>
         <tbody>
@@ -142,6 +143,15 @@ if(empty($_SESSION['emp_role'])) {
               } ?>
             </td>
             <td><?= $row['t_datetime']; ?></td>
+            <td>
+              <?php 
+              if($row['stat_datetime'] == $row['t_datetime']) {
+                echo 'ยังไม่ระบุ';
+              } else {
+                echo $row['stat_datetime'];
+              }
+              ?>
+            </td>
             <td>
               <a href="history_detail.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
             </td>
