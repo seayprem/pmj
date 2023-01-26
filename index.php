@@ -41,6 +41,22 @@ if($_SESSION['emp_role'] == 1) {
   </script>";
 }
 
+$count_transfer_sql = "SELECT COUNT(t_id) AS total FROM transfer";
+$count_transfer_query = mysqli_query($conn, $count_transfer_sql);
+$count_transfer_result = mysqli_fetch_array($count_transfer_query);
+
+$count_status_pending_sql = "SELECT COUNT(stat_id) AS pending FROM status WHERE stat_status = 1";
+$count_status_pending_query = mysqli_query($conn, $count_status_pending_sql);
+$count_status_pending_result = mysqli_fetch_array($count_status_pending_query);
+
+$count_status_accept_sql = "SELECT COUNT(stat_id) AS accept FROM status WHERE stat_status = 2";
+$count_status_accept_query = mysqli_query($conn, $count_status_accept_sql);
+$count_status_accept_result = mysqli_fetch_array($count_status_accept_query);
+
+$count_status_reject_sql = "SELECT COUNT(stat_id) AS reject FROM status WHERE stat_status = 3";
+$count_status_reject_query = mysqli_query($conn, $count_status_reject_sql);
+$count_status_reject_result = mysqli_fetch_array($count_status_reject_query);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,7 +123,52 @@ if($_SESSION['emp_role'] == 1) {
     <div class="dashboard-content px-3 pt-4">
       <h2 class="fs-5"> Dashboard</h2>
       <hr>
+      <!-- start count all  -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card text-white bg-primary mb-3">
+                <div class="card-header">จำนวนรายการวัสดุที่ทำรายการทั้งหมด</div>
+                  <div class="card-body">
+                    <h5 class="card-title">จำนวน <?= number_format($count_transfer_result['total']); ?> รายการ</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+              <div class="card text-white bg-success mb-3">
+                <div class="card-header">จำนวนรายการวัสดุที่อนุมัติทั้งหมด</div>
+                <div class="card-body">
+                  <h5 class="card-title">จำนวน <?= number_format($count_status_accept_result['accept']); ?> รายการ</h5>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card text-white bg-warning mb-3">
+                <div class="card-header">จำนวนรายการวัสดุที่รออนุมัติทั้งหมด</div>
+                  <div class="card-body">
+                    <h5 class="card-title">จำนวน <?= number_format($count_status_pending_result['pending']); ?> รายการ</h5>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">จำนวนรายการวัสดุที่ปฏิเสธอนุมัติทั้งหมด</div>
+                  <div class="card-body">
+                    <h5 class="card-title">จำนวน <?= number_format($count_status_reject_result['reject']); ?> รายการ</h5>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end count all  -->
+    <hr>
+
+
+    
     </div>
+
 
 
 
