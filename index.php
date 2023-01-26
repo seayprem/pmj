@@ -45,6 +45,14 @@ $count_transfer_sql = "SELECT COUNT(t_id) AS total FROM transfer";
 $count_transfer_query = mysqli_query($conn, $count_transfer_sql);
 $count_transfer_result = mysqli_fetch_array($count_transfer_query);
 
+$count_transfer_export_sql = "SELECT COUNT(t_id) AS total FROM transfer WHERE t_type = 1";
+$count_transfer_export_query = mysqli_query($conn, $count_transfer_export_sql);
+$count_transfer_export_result = mysqli_fetch_array($count_transfer_export_query);
+
+$count_transfer_import_sql = "SELECT COUNT(t_id) AS total FROM transfer WHERE t_type = 2";
+$count_transfer_import_query = mysqli_query($conn, $count_transfer_import_sql);
+$count_transfer_import_result = mysqli_fetch_array($count_transfer_import_query);
+
 $count_status_pending_sql = "SELECT COUNT(stat_id) AS pending FROM status WHERE stat_status = 1";
 $count_status_pending_query = mysqli_query($conn, $count_status_pending_sql);
 $count_status_pending_result = mysqli_fetch_array($count_status_pending_query);
@@ -165,8 +173,11 @@ $count_status_reject_result = mysqli_fetch_array($count_status_reject_query);
       <!-- end count all  -->
     <hr>
 
+    <!-- start chart  -->
+    <canvas id="myChart" height="100"></canvas>
+    <!-- end chart  -->
 
-    
+
     </div>
 
 
@@ -181,6 +192,7 @@ $count_status_reject_result = mysqli_fetch_array($count_status_reject_query);
   <script src="js/bootstrap.min.js"></script>
   <script src="js/sweetalert2@11.js"></script>
   <script src="js/responsive.js"></script>
+  <script src="js/chart.min.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -197,6 +209,38 @@ $count_status_reject_result = mysqli_fetch_array($count_status_reject_query);
           window.location = 'logout.php';
         })
       })
+
+      // start chart 
+      const ctx = document.getElementById('myChart');
+      Chart.defaults.font.size = 18;
+      Chart.defaults.color = "#000";
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['นำเข้า', 'เบิก', 'อนุมัติ', 'ไม่อนุมัติ', 'รออนุมัติ'],
+          datasets: [{
+            label: 'แสดงข้อมูลทั่วไป',
+            data: [<?= $count_transfer_import_result['total']; ?>, <?= $count_transfer_export_result['total']; ?>, <?= $count_status_accept_result['accept']; ?>, <?= $count_status_reject_result['reject']; ?>, <?= $count_status_pending_result['pending']; ?>],
+            backgroundColor: [
+              'rgb(126, 245, 51)',
+              'rgb(230, 55, 11)',
+              'rgb(60, 240, 123)',
+              'rgb(255, 51, 88)',
+              'rgb(219, 255, 18)'
+            ],
+            borderWidth: 5
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      // end chart 
 
     })
   </script>
