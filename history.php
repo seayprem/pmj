@@ -94,10 +94,10 @@ if(empty($_SESSION['emp_role'])) {
       <h2 class="fs-5"> ประวัติข้อมูลการเบิกวัสดุสำนักงาน</h2>
       <hr>
       <div class="mb-3">
-        <a href="history.php" class="btn btn-success">แสดงทั้งหมด</a>
-        <a href="#" class="btn btn-success">แสดงเฉพาะอนุมัติ</a>
-        <a href="#" class="btn btn-success">แสดงเฉพาะไม่อนุมัติ</a>
-        <a href="#" class="btn btn-success">แสดงเฉพาะรออนุมัติ</a>
+        <a href="history.php" class="btn btn-primary">แสดงทั้งหมด</a>
+        <a href="?accept" class="btn btn-success">แสดงเฉพาะอนุมัติ</a>
+        <a href="?reject" class="btn btn-danger">แสดงเฉพาะไม่อนุมัติ</a>
+        <a href="?pending" class="btn btn-warning">แสดงเฉพาะรออนุมัติ</a>
       </div>
       <div class="mb-3">
 
@@ -117,7 +117,18 @@ if(empty($_SESSION['emp_role'])) {
           <?php 
           $emp_id = $_SESSION['emp_id'];
           $i = 0;
-          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id WHERE transfer.emp_id = $emp_id ORDER BY transfer.t_id DESC";
+
+          if(isset($_GET['accept'])) {
+            $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id WHERE transfer.emp_id = $emp_id AND status.stat_status = 2 ORDER BY transfer.t_id DESC";
+          } else if(isset($_GET['reject'])) {
+            $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id WHERE transfer.emp_id = $emp_id AND status.stat_status = 3 ORDER BY transfer.t_id DESC";
+          } else if(isset($_GET['pending'])) {
+            $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id WHERE transfer.emp_id = $emp_id AND status.stat_status = 1 ORDER BY transfer.t_id DESC";
+          } else {
+            $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id WHERE transfer.emp_id = $emp_id ORDER BY transfer.t_id DESC";
+          }
+
+          
           $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
 
