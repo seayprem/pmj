@@ -263,9 +263,8 @@ if($_SESSION['emp_role'] == 1) {
             icon: 'error',
             title: 'กรุณากรอกข้อมูลให้ครบทุกช่อง',
           })
-        }
-
-        // Ajax => Server
+        } else {
+          // Ajax => Server
         $.ajax({
           url: 'addEmployeeController.php',
           method: 'POST',
@@ -300,6 +299,9 @@ if($_SESSION['emp_role'] == 1) {
             }
           }
         })
+        }
+
+        
 
       })
 

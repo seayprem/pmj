@@ -238,7 +238,7 @@ if($_SESSION['emp_role'] == 1) {
                 icon: 'error',
                 title: 'บันทึกข้อมูลวัสดุสำนักงานไม่สำเร็จ โปรดลองอีกครั้ง',
               }).then((result) => {
-                window.location = 'offices.php';
+                window.location = 'addOffice.php';
               })
             }
           }
