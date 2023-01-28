@@ -123,7 +123,7 @@ if(empty($_SESSION['emp_role'])) {
       <!-- END DATE SELECT  -->
       
      <!-- Start List tranfer only Supllier -->
-      <table class="table" id="myTable">
+      <table class="table table-hover" id="myTable">
         <thead>
           <th class="text-center">ลำดับ</th>
           <th class="text-center">ประเภทการทำรายการ</th>
@@ -180,11 +180,11 @@ if(empty($_SESSION['emp_role'])) {
             </td>
             <td>
             <?php if($row['stat_status'] == 2) {
-                echo 'อนุมัติ';
+                echo '<h5><span class="badge bg-success">อนุมัติ</span></h5>';
               } else if($row['stat_status'] == 1) {
-                echo 'รอการอนุมัติ';
+                echo '<h5><span class="badge bg-warning">รอการอนุมัติ</span></h5>';
               } else {
-                echo 'ไม่อนุมัติ';
+                echo '<h5><span class="badge bg-danger">ไม่อนุมัติ</span></h5>';
               } ?>
             </td>
             <td><?= $row['t_datetime']; ?></td>
