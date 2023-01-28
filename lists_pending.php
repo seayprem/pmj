@@ -114,6 +114,28 @@ if($_SESSION['emp_role'] == 1) {
     <div class="dashboard-content px-3 pt-4">
       <h2 class="fs-5"> รายการวัสดุสำนักงานที่ยังไม่อนุมัติ</h2>
       <hr>
+      <!-- START DATE SELECT  -->
+      <form action="lists_pending.php" method="POST">
+      <div class="mb-3">
+        <div class="row">
+          
+          <div class="col-md-3">
+            <label class="form-label">เลือกวันที่เริ่มต้น</label>
+            <input type="date" name="date_start" class="form-control">
+            <label class="form-label">เวลา</label>
+            <input type="time" name="time_start" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">เลือกวันที่สิ้นสุด</label>
+              <input type="date" name="date_end" class="form-control">
+              <label class="form-label">เวลา</label>
+              <input type="time" name="time_end" class="form-control">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-pmj mt-2" id="time_select" name="time_select">ตกลง</button>
+      </div>
+      </form>
+      <!-- END DATE SELECT  -->
       
      <!-- Start List Pending Supllier -->
      <table class="table table-hover" id="myTable">
@@ -129,7 +151,26 @@ if($_SESSION['emp_role'] == 1) {
           <?php 
           $emp_id = $_SESSION['emp_id'];
           $i = 0;
-          $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 ORDER BY transfer.t_id DESC";
+          
+          if(isset($_POST['time_select'])) {
+            $date_start = $_POST['date_start'];
+            $time_start = $_POST['time_start'];
+            $date_end = $_POST['date_end'];
+            $time_end = $_POST['time_end'];
+
+            if(empty($date_start) && empty($time_start) && empty($date_end) && empty($time_end)) {
+              $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 ORDER BY transfer.t_id DESC";
+            } else if(empty($time_start) && empty($time_end)) {
+              $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 AND DATE(t_datetime) BETWEEN '$date_start' AND '$date_end'";
+            } else {
+              $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 AND t_datetime BETWEEN '$date_start $time_start' AND '$date_end $time_end'";
+            }
+
+          } else {
+            $sql = "SELECT * FROM `transfer` INNER JOIN status ON transfer.stat_id = status.stat_id INNER JOIN employees ON transfer.emp_id = employees.emp_id WHERE status.stat_status = 1 ORDER BY transfer.t_id DESC";
+          }
+
+          
           $query = mysqli_query($conn, $sql);
           while($row = mysqli_fetch_array($query)) {
 
