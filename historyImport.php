@@ -184,7 +184,7 @@ if($_SESSION['emp_role'] == 1) {
                 echo 'นำเข้า';
               } ?>
             </td>
-            <td><?= $row['t_datetime']; ?></td>
+            <td><?= DateThai($row['t_datetime']); ?></td>
             <td>
               <a href="history_detailImport.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
             </td>

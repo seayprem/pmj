@@ -195,7 +195,7 @@ if($_SESSION['emp_role'] == 1) {
                 echo '<h5><span class="badge bg-danger">ไม่อนุมัติ</span></h5>';
               } ?>
             </td>
-            <td><?= $row['t_datetime']; ?></td>
+            <td><?= DateThai($row['t_datetime']); ?></td>
             <td>
               <a href="lists_pending_detail.php?id=<?= $row['t_id']; ?>" class="btn btn-secondary">รายละเอียด</a>
             </td>

@@ -187,13 +187,13 @@ if(empty($_SESSION['emp_role'])) {
                 echo '<h5><span class="badge bg-danger">ไม่อนุมัติ</span></h5>';
               } ?>
             </td>
-            <td><?= $row['t_datetime']; ?></td>
+            <td><?= DateThai($row['t_datetime']); ?></td>
             <td>
               <?php 
               if($row['stat_datetime'] == $row['t_datetime']) {
                 echo 'ยังไม่ระบุ';
               } else {
-                echo $row['stat_datetime'];
+                echo DateThai($row['stat_datetime']);
               }
               ?>
             </td>
