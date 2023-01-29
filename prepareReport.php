@@ -165,7 +165,10 @@ $math_random = "pmj".$datesss.".pdf";
 
 $filename = "report/".$math_random."";
 
-// $pdf->OutPut('F', $filename, true);
+$reported_sql = "INSERT INTO `reported` (`path`, `report_datetime`) VALUES ('$math_random', current_timestamp())";
+mysqli_query($conn, $reported_sql);
+
+$pdf->OutPut('F', $filename, true);
 
 $pdf->OutPut();
 

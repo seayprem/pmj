@@ -32,6 +32,8 @@
   </li>
   <li class=""><a href="report.php" class="text-decoration-none px-3 py-2 d-block"> ออกรายงาน</a>
   </li>
+  <li class=""><a href="reportHistory.php" class="text-decoration-none px-3 py-2 d-block"> ประวัติรายงาน</a>
+  </li>
   <?php } ?>
   <!-- Logout -->
   <hr class="h-color mx-2">

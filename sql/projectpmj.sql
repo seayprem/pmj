@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2023 at 04:58 PM
+-- Generation Time: Jan 29, 2023 at 04:11 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -66,8 +66,8 @@ CREATE TABLE `offices` (
 INSERT INTO `offices` (`office_id`, `office_name`, `office_qty`) VALUES
 (1, 'กระดาษ', 0),
 (2, 'หมึก', 0),
-(3, 'ดินสอ', 50),
-(4, 'ปากกา', 100),
+(3, 'ดินสอ', 40),
+(4, 'ปากกา', 90),
 (5, 'ไม้บรรทัด', 0),
 (6, 'ยางลบ', 0),
 (7, 'คลิป', 0),
@@ -168,6 +168,25 @@ INSERT INTO `offices` (`office_id`, `office_name`, `office_qty`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reported`
+--
+
+CREATE TABLE `reported` (
+  `id` int(11) NOT NULL,
+  `path` text NOT NULL,
+  `report_datetime` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `reported`
+--
+
+INSERT INTO `reported` (`id`, `path`, `report_datetime`) VALUES
+(1, 'pmj2023-01-29_04-01-57-pm.pdf', '2023-01-29 15:01:57');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `status`
 --
 
@@ -184,7 +203,9 @@ CREATE TABLE `status` (
 --
 
 INSERT INTO `status` (`stat_id`, `stat_status`, `stat_reason`, `stat_datetime`, `emp_id`) VALUES
-(1, 3, '', '2023-01-26 14:49:37', 2);
+(1, 3, '', '2023-01-26 14:49:37', 2),
+(2, 1, '', '2023-01-28 08:23:50', 0),
+(3, 1, '', '2023-01-28 08:55:26', 0);
 
 -- --------------------------------------------------------
 
@@ -205,7 +226,10 @@ CREATE TABLE `transfer` (
 --
 
 INSERT INTO `transfer` (`t_id`, `t_type`, `stat_id`, `emp_id`, `t_datetime`) VALUES
-(1, 1, 1, 7, '2023-01-26 14:49:03');
+(1, 1, 1, 7, '2023-01-26 14:49:03'),
+(2, 1, 2, 1, '2023-01-28 08:23:50'),
+(3, 1, 3, 7, '2023-01-28 08:55:26'),
+(4, 2, 0, 2, '2023-01-28 09:36:15');
 
 -- --------------------------------------------------------
 
@@ -226,7 +250,14 @@ CREATE TABLE `transfer_detail` (
 
 INSERT INTO `transfer_detail` (`tdel_id`, `t_id`, `office_id`, `tdel_qty`) VALUES
 (1, 1, 4, 10),
-(2, 1, 3, 10);
+(2, 1, 3, 10),
+(3, 2, 15, 1),
+(4, 2, 3, 1),
+(5, 2, 4, 1),
+(6, 3, 4, 9),
+(7, 3, 3, 9),
+(8, 3, 15, 2),
+(9, 4, 15, 3);
 
 --
 -- Indexes for dumped tables
@@ -243,6 +274,12 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `offices`
   ADD PRIMARY KEY (`office_id`);
+
+--
+-- Indexes for table `reported`
+--
+ALTER TABLE `reported`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `status`
@@ -270,7 +307,7 @@ ALTER TABLE `transfer_detail`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `offices`
@@ -279,22 +316,28 @@ ALTER TABLE `offices`
   MODIFY `office_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
+-- AUTO_INCREMENT for table `reported`
+--
+ALTER TABLE `reported`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
-  MODIFY `stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transfer`
 --
 ALTER TABLE `transfer`
-  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transfer_detail`
 --
 ALTER TABLE `transfer_detail`
-  MODIFY `tdel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `tdel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
