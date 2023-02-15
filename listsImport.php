@@ -84,7 +84,7 @@ if(empty($_SESSION['emp_role'])) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> รายการวัสดุสำนักงาน</h2>
+      <h2 class="fs-5"> รายการนำเข้าวัสดุสำนักงาน</h2>
       <hr>
       <!-- Start Cart Controller  -->
       <?php 

@@ -112,7 +112,7 @@ if($_SESSION['emp_role'] == 1) {
 
     <!-- start dashboard content  -->
     <div class="dashboard-content px-3 pt-4">
-      <h2 class="fs-5"> รายการวัสดุสำนักงานที่ยังไม่อนุมัติ</h2>
+      <h2 class="fs-5"> ประวัติรายงาน</h2>
       <hr>
       <!-- START DATE SELECT  -->
       <form action="reportHistory.php" method="POST">
